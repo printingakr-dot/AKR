@@ -774,16 +774,27 @@
         function changeQuotaPerPage(val) { quotaItemsPerPage = val === 'all' ? employeeDatabase.length : parseInt(val); quotaCurrentPage = 1; renderAdminQuotaTable(); }
         function changeQuotaPage(direction) { quotaCurrentPage += direction; renderAdminQuotaTable(); }
 
+        // 🌟 แก้ไข: ฟังก์ชันแสดงผลตารางโควตาแอดมินและการเรียงลำดับตามเปอร์เซ็นต์ที่ใช้ไป
         function renderAdminQuotaTable() {
             const tbody = document.getElementById('admin-quota-table-body'); if (!tbody) return; tbody.innerHTML = "";
             let displayList = [...employeeDatabase];
+            
             if (quotaSortField) {
                 displayList.sort((a, b) => {
-                    let remA = quotaSortField === 'vacation' ? a.leaveVacationMax - a.leaveVacationUsed : (quotaSortField === 'sick' ? a.leaveSickMax - a.leaveSickUsed : a.leavePersonalMax - a.leavePersonalUsed);
-                    let remB = quotaSortField === 'vacation' ? b.leaveVacationMax - b.leaveVacationUsed : (quotaSortField === 'sick' ? b.leaveSickMax - b.leaveSickUsed : b.leavePersonalMax - b.leavePersonalUsed);
-                    return quotaSortOrder === 'asc' ? remA - remB : remB - remA;
+                    // คำนวณเปอร์เซ็นต์การใช้ไปของพนักงาน A
+                    let maxA = quotaSortField === 'vacation' ? a.leaveVacationMax : (quotaSortField === 'sick' ? a.leaveSickMax : a.leavePersonalMax);
+                    let usedA = quotaSortField === 'vacation' ? a.leaveVacationUsed : (quotaSortField === 'sick' ? a.leaveSickUsed : a.leavePersonalUsed);
+                    let pctA = maxA > 0 ? (usedA / maxA) * 100 : 0;
+
+                    // คำนวณเปอร์เซ็นต์การใช้ไปของพนักงาน B
+                    let maxB = quotaSortField === 'vacation' ? b.leaveVacationMax : (quotaSortField === 'sick' ? b.leaveSickMax : b.leavePersonalMax);
+                    let usedB = quotaSortField === 'vacation' ? b.leaveVacationUsed : (quotaSortField === 'sick' ? b.leaveSickUsed : b.leavePersonalUsed);
+                    let pctB = maxB > 0 ? (usedB / maxB) * 100 : 0;
+
+                    return quotaSortOrder === 'asc' ? pctA - pctB : pctB - pctA;
                 });
             }
+            
             const totalItems = displayList.length; const perPage = quotaItemsPerPage; const totalPages = Math.ceil(totalItems / perPage) || 1;
             if (quotaCurrentPage > totalPages) quotaCurrentPage = totalPages; if (quotaCurrentPage < 1) quotaCurrentPage = 1;
             const paginatedList = displayList.slice((quotaCurrentPage - 1) * perPage, quotaCurrentPage * perPage);
