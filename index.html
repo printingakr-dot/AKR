@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบบริหารจัดการวันลา</title>
+    <title>ระบบบริหารจัดการวันลา - ปฏิทินไทย</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -29,8 +29,7 @@
     <div id="page-login" class="fixed inset-0 z-50 flex items-center justify-center bg-linear-to-tr from-slate-900 via-indigo-950 to-slate-900 px-4 overflow-y-auto py-10">
         <div id="login-box" class="w-full max-w-md bg-white/95 p-8 rounded-3xl shadow-2xl backdrop-blur-md border border-white/20 text-center space-y-6 my-auto">
             <div>
-                <div id="login-logo-container" class="mx-auto w-16 h-16 flex items-center justify-center">
-                    </div>
+                <div id="login-logo-container" class="mx-auto w-16 h-16 flex items-center justify-center"></div>
                 <h2 class="mt-4 text-2xl font-bold text-slate-900 tracking-tight">ระบบบริหารจัดการวันลา</h2>
             </div>
             <form class="space-y-4 text-left" onsubmit="return handleLoginSubmit(event)">
@@ -87,8 +86,7 @@
     <aside id="main-sidebar" class="hidden w-full md:w-64 bg-slate-900 text-slate-400 p-6 flex flex-col justify-between shrink-0 border-r border-slate-800">
         <div class="space-y-8">
             <div class="flex items-center gap-3 text-white">
-                <div id="sidebar-logo-container" class="w-9 h-9 flex items-center justify-center shrink-0">
-                    </div>
+                <div id="sidebar-logo-container" class="w-9 h-9 flex items-center justify-center shrink-0"></div>
                 <span class="font-bold tracking-wider text-sm">ระบบวันลา</span>
             </div>
             <div class="bg-slate-800/50 p-4 rounded-2xl border border-slate-800 flex items-center gap-3">
@@ -263,9 +261,9 @@
     <script>
         const firebaseConfig = {
             apiKey: "YOUR_API_KEY", 
-            authDomain: "akeleave-9cd1e.firebaseapp.com",
-            projectId: "akeleave-9cd1e",
-            storageBucket: "akeleave-9cd1e.appspot.com",
+            authDomain: "akrleave-9cd1e.firebaseapp.com",
+            projectId: "akrleave-9cd1e",
+            storageBucket: "akrleave-9cd1e.appspot.com",
             messagingSenderId: "YOUR_SENDER_ID",
             appId: "YOUR_APP_ID" 
         };
@@ -329,7 +327,7 @@
             if (!isoDateString) return "-";
             const parts = isoDateString.split('-');
             if (parts.length !== 3) return isoDateString;
-            const year = parts[0].substring(2); 
+            const year = String(parseInt(parts[0]) + 543).substring(2); 
             const month = parts[1];
             const day = parts[2];
             return `${day}/${month}/${year}`;
@@ -422,7 +420,6 @@
 
         checkUserSessionAndListen();
 
-        // 1. แก้ไขปัญหาระบบล็อกอิน (ตรวจสอบเชื่อมต่อข้อมูลคลาวด์)
         function handleLoginSubmit(event) {
             event.preventDefault();
             const uField = document.getElementById('login-username').value.trim().toLowerCase();
@@ -496,7 +493,6 @@
             }
         }
 
-        // 2. ปรับฟังก์ชันการลงทะเบียนใหม่ให้ Toast แจ้งเตือนแสดงขึ้นมาก่อน
         function handleRegisterSubmit(e) {
             e.preventDefault();
             const uName = document.getElementById('reg-username').value.trim().toLowerCase();
@@ -572,6 +568,7 @@
             if (badge) { if (pendingCount > 0) { badge.innerText = pendingCount; badge.classList.remove('hidden'); } else { badge.classList.add('hidden'); } }
         }
 
+        // 🌟 แก้ไขฟังก์ชันโครงสร้างปฏิทินไทย และการแมปขยายแถบสิทธิ์วันลาให้คลุมครบทุกวัน (15 - 21)
         function renderCalendarStructure(containerId, labelId) {
             const container = document.getElementById(containerId);
             const label = document.getElementById(labelId);
@@ -625,6 +622,7 @@
                 const badgesWrapper = document.createElement('div');
                 badgesWrapper.className = "space-y-1 mt-1 flex-1 overflow-y-auto max-h-[50px]";
 
+                // ตรวจสอบเงื่อนไขวันลาแบบกระจายครอบคลุมทุกช่องบนหน้าปฏิทิน (เช่น 15 จนถึง 21 ครบถ้วน)
                 const matchingLeaves = leaveDatabase.filter(leave => {
                     if (leave.status !== 'approved' && leave.status !== 'pending') return false;
                     const cDate = new Date(currentIsoStr); cDate.setHours(0,0,0,0);
@@ -638,22 +636,28 @@
                     const pendingGroup = matchingLeaves.filter(x => x.status === 'pending');
 
                     if (approvedGroup.length > 0) {
-                        const nicknames = approvedGroup.map(x => { const matchEmp = employeeDatabase.find(e => e.username === x.username); return matchEmp ? matchEmp.nickName : x.name.replace("คุณ", "").split(" ")[0]; });
-                        const uniqueNicknames = [...new Set(nicknames)].join(", ");
-                        const bNode = document.createElement('div');
-                        bNode.className = "leave-badge cursor-pointer rounded p-1 text-[9px] font-black border bg-blue-50 text-blue-700 border-blue-200 truncate text-center";
-                        bNode.innerHTML = `🟢 ลา: ${uniqueNicknames}`;
-                        bNode.onclick = (e) => { e.stopPropagation(); openModalPopup(approvedGroup[0]); };
-                        badgesWrapper.appendChild(bNode);
+                        approvedGroup.forEach(leaveItem => {
+                            const matchEmp = employeeDatabase.find(e => e.username === leaveItem.username);
+                            const displayNick = matchEmp ? matchEmp.nickName : leaveItem.name.replace("คุณ", "").split(" ")[0];
+                            
+                            const bNode = document.createElement('div');
+                            bNode.className = "leave-badge cursor-pointer rounded p-1 text-[9px] font-black border bg-blue-50 text-blue-700 border-blue-200 truncate text-center";
+                            bNode.innerHTML = `🟢 ลา: ${displayNick}`;
+                            bNode.onclick = (e) => { e.stopPropagation(); openModalPopup(leaveItem); };
+                            badgesWrapper.appendChild(bNode);
+                        });
                     }
                     if (pendingGroup.length > 0) {
-                        const nicknamesPending = pendingGroup.map(x => { const matchEmp = employeeDatabase.find(e => e.username === x.username); return matchEmp ? matchEmp.nickName : x.name.replace("คุณ", "").split(" ")[0]; });
-                        const uniqueNicknamesPending = [...new Set(nicknamesPending)].join(", ");
-                        const bNode = document.createElement('div');
-                        bNode.className = "leave-badge cursor-pointer rounded p-1 text-[9px] font-bold border bg-amber-50 text-amber-700 border-amber-200 truncate text-center animate-pulse";
-                        bNode.innerHTML = `⏳ รอ: ${uniqueNicknamesPending}`;
-                        bNode.onclick = (e) => { e.stopPropagation(); openModalPopup(pendingGroup[0]); };
-                        badgesWrapper.appendChild(bNode);
+                        pendingGroup.forEach(leaveItem => {
+                            const matchEmp = employeeDatabase.find(e => e.username === leaveItem.username);
+                            const displayNick = matchEmp ? matchEmp.nickName : leaveItem.name.replace("คุณ", "").split(" ")[0];
+                            
+                            const bNode = document.createElement('div');
+                            bNode.className = "leave-badge cursor-pointer rounded p-1 text-[9px] font-bold border bg-amber-50 text-amber-700 border-amber-200 truncate text-center animate-pulse";
+                            bNode.innerHTML = `⏳ รอ: ${displayNick}`;
+                            bNode.onclick = (e) => { e.stopPropagation(); openModalPopup(leaveItem); };
+                            badgesWrapper.appendChild(bNode);
+                        });
                     }
                 }
                 dayCell.appendChild(badgesWrapper); container.appendChild(dayCell);
@@ -824,7 +828,6 @@
             hasShownMedicalAlertThisSession = false; calcFullPageSummary();
         }
 
-        // 3. แก้ไขวันลาให้กลับเป็นระบบเดิม (นับรวมทุกวัน ไม่หักเสาร์-อาทิตย์ออก)
         function calcFullPageSummary() {
             const summaryLabel = document.getElementById('full-summary-count'); 
             const leaveType = document.getElementById('f-leave-type').value; 
@@ -834,7 +837,6 @@
                 const sVal = document.getElementById('f-start-date').value; 
                 const eVal = document.getElementById('f-end-date').value;
                 if (sVal && eVal) { 
-                    // ระบบเดิม: นับรวมทุกวันตั้งแต่เริ่มต้นจนถึงวันสิ้นสุดโดยตรง
                     const startDiff = new Date(sVal);
                     const endDiff = new Date(eVal);
                     const timeDiff = endDiff.getTime() - startDiff.getTime();
