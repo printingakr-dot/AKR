@@ -623,23 +623,9 @@
 
                 const matchingLeaves = leaveDatabase.filter(leave => {
                     if (leave.status !== 'approved' && leave.status !== 'pending') return false;
-                    
-                    const cDate = new Date(year, month, day);
-                    cDate.setHours(0,0,0,0);
-                    
-                    const [sY, sM, sD] = leave.date.split('-').map(Number);
-                    const sDate = new Date(sY, sM - 1, sD);
-                    sDate.setHours(0,0,0,0);
-                    
-                    let eDate;
-                    if (leave.endDate) {
-                        const [eY, eM, eD] = leave.endDate.split('-').map(Number);
-                        eDate = new Date(eY, eM - 1, eD);
-                    } else {
-                        eDate = new Date(sY, sM - 1, sD);
-                    }
-                    eDate.setHours(0,0,0,0);
-                    
+                    const cDate = new Date(currentIsoStr); cDate.setHours(0,0,0,0);
+                    const sDate = new Date(leave.date); sDate.setHours(0,0,0,0);
+                    let eDate = leave.endDate ? new Date(leave.endDate) : new Date(leave.date); eDate.setHours(0,0,0,0);
                     return cDate >= sDate && cDate <= eDate;
                 });
 
@@ -821,6 +807,9 @@
                 paginatedList.forEach(emp => {
                     const tr = document.createElement('tr');
                     const createBar = (used, max, color) => {
+                        if (max === 0) {
+                            return `<div class="py-1 text-slate-400 italic font-semibold text-xs text-center md:text-left">ไม่มีสิทธิ์ลา</div>`;
+                        }
                         const pct = Math.min(100, Math.max(0, (used / max) * 100));
                         return `<div class="space-y-1"><div class="flex justify-between text-[11px] font-bold"><span>${Number(used.toFixed(2))} / ${max} วัน</span><span>${Math.round(pct)}%</span></div><div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden"><div class="${color} h-full" style="width: ${pct}%"></div></div></div>`;
                     };
@@ -890,7 +879,36 @@
         function closeMedicalAlertModal() { document.getElementById('medical-cert-alert-modal').classList.add('hidden'); }
 
         function handleLeaveFormSubmit(e) {
-            e.preventDefault(); const currentEmp = loggedInUserSession.data; const type = document.getElementById('f-leave-type').value; const reason = document.getElementById('f-reason').value; const dayWeight = parseFloat(document.getElementById('full-summary-count').getAttribute('data-days') || 0);
+            e.preventDefault(); 
+            const currentEmp = loggedInUserSession.data; 
+            const type = document.getElementById('f-leave-type').value; 
+            const reason = document.getElementById('f-reason').value; 
+            const dayWeight = parseFloat(document.getElementById('full-summary-count').getAttribute('data-days') || 0);
+            
+            let maxQuota = 0;
+            let usedQuota = 0;
+            if (type.includes('พักผ่อน')) { maxQuota = currentEmp.leaveVacationMax || 0; usedQuota = currentEmp.leaveVacationUsed || 0; }
+            else if (type.includes('ป่วย')) { maxQuota = currentEmp.leaveSickMax || 0; usedQuota = currentEmp.leaveSickUsed || 0; }
+            else if (type.includes('กิจ')) { maxQuota = currentEmp.leavePersonalMax || 0; usedQuota = currentEmp.leavePersonalUsed || 0; }
+            
+            let remaining = maxQuota - usedQuota;
+            if (maxQuota === 0) {
+                alert('❌ ไม่สามารถยื่นคำขอได้เนื่องจากคุณไม่มีสิทธิ์ลางานประเภทนี้คราบ!');
+                return;
+            }
+            if (remaining <= 0) {
+                alert('❌ ไม่สามารถยื่นคำขอได้เนื่องจากคุณไม่มีวันลาคงเหลือสำหรับประเภทนี้คราบ!');
+                return;
+            }
+            if (dayWeight > remaining) {
+                alert(`❌ วันลาคงเหลือไม่พอคราบ! โควตาคงเหลือของคุณคือ ${Number(remaining.toFixed(2))} วัน แต่คุณยื่นขอลา ${Number(dayWeight.toFixed(2))} วัน`);
+                return;
+            }
+            if (dayWeight <= 0) {
+                alert('❌ กรุณาเลือกช่วงเวลาลาที่ถูกต้องคราบ!');
+                return;
+            }
+
             let targetStartDate = (currentFormPageMode === 'full') ? document.getElementById('f-start-date').value : document.getElementById('f-hour-date').value;
             let targetEndDate = (currentFormPageMode === 'full') ? document.getElementById('f-end-date').value : document.getElementById('f-hour-date').value;
             let timeText = (currentFormPageMode === 'full') ? "เต็มวัน" : `${document.getElementById('f-time-start').value} - ${document.getElementById('f-time-end').value}`;
