@@ -568,7 +568,6 @@
             if (badge) { if (pendingCount > 0) { badge.innerText = pendingCount; badge.classList.remove('hidden'); } else { badge.classList.add('hidden'); } }
         }
 
-        // 🌟 แก้ไขฟังก์ชันโครงสร้างปฏิทินไทย และการแมปขยายแถบสิทธิ์วันลาให้คลุมครบทุกวัน (15 - 21)
         function renderCalendarStructure(containerId, labelId) {
             const container = document.getElementById(containerId);
             const label = document.getElementById(labelId);
@@ -622,12 +621,25 @@
                 const badgesWrapper = document.createElement('div');
                 badgesWrapper.className = "space-y-1 mt-1 flex-1 overflow-y-auto max-h-[50px]";
 
-                // ตรวจสอบเงื่อนไขวันลาแบบกระจายครอบคลุมทุกช่องบนหน้าปฏิทิน (เช่น 15 จนถึง 21 ครบถ้วน)
                 const matchingLeaves = leaveDatabase.filter(leave => {
                     if (leave.status !== 'approved' && leave.status !== 'pending') return false;
-                    const cDate = new Date(currentIsoStr); cDate.setHours(0,0,0,0);
-                    const sDate = new Date(leave.date); sDate.setHours(0,0,0,0);
-                    let eDate = leave.endDate ? new Date(leave.endDate) : new Date(leave.date); eDate.setHours(0,0,0,0);
+                    
+                    const cDate = new Date(year, month, day);
+                    cDate.setHours(0,0,0,0);
+                    
+                    const [sY, sM, sD] = leave.date.split('-').map(Number);
+                    const sDate = new Date(sY, sM - 1, sD);
+                    sDate.setHours(0,0,0,0);
+                    
+                    let eDate;
+                    if (leave.endDate) {
+                        const [eY, eM, eD] = leave.endDate.split('-').map(Number);
+                        eDate = new Date(eY, eM - 1, eD);
+                    } else {
+                        eDate = new Date(sY, sM - 1, sD);
+                    }
+                    eDate.setHours(0,0,0,0);
+                    
                     return cDate >= sDate && cDate <= eDate;
                 });
 
