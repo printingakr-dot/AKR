@@ -32,12 +32,11 @@
                 <div id="login-logo-container" class="mx-auto w-16 h-16 flex items-center justify-center">
                     </div>
                 <h2 class="mt-4 text-2xl font-bold text-slate-900 tracking-tight">ระบบบริหารจัดการวันลา</h2>
-                <p class="text-xs text-slate-500 mt-1">ระบบบริหารจัดการวันลาและฐานข้อมูลพนักงานอัจฉริยะ</p>
             </div>
             <form class="space-y-4 text-left" onsubmit="return handleLoginSubmit(event)">
                 <div>
                     <label class="block text-xs font-semibold text-slate-600 mb-1.5">Username</label>
-                    <input type="text" id="login-username" required placeholder="กรอกชื่อผู้ใช้ เช่น admin หรือ ชื่อพนักงาน" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-hidden">
+                    <input type="text" id="login-username" required placeholder="กรอกชื่อผู้ใช้ที่ลงทะเบียนไว้" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-hidden">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-slate-600 mb-1.5">Password</label>
@@ -107,6 +106,7 @@
                         📩 จัดการคำขอลา
                         <span id="badge-pending-count" class="absolute right-3 top-3.5 bg-rose-500 text-white font-bold text-[10px] px-1.5 py-0.5 rounded-full hidden">0</span>
                     </button>
+                    <button onclick="navigateTo('page-admin-logo')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 hover:text-white text-left cursor-pointer">🎨 ตั้งค่าโลโก้องค์กร</button>
                 </div>
                 <div id="side-emp-links" class="hidden space-y-1.5">
                     <button onclick="navigateTo('page-emp-dashboard')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 hover:text-white text-left cursor-pointer">📈 Dashboard & โควตา</button>
@@ -141,7 +141,10 @@
             </div>
             <div class="bg-white rounded-3xl border border-slate-200 shadow-2xs p-6 space-y-4">
                 <div class="flex justify-between items-center">
-                    <h3 class="text-base font-bold text-slate-900">🗓️ ปฏิทินลางานส่วนกลางพนักงาน (รูปแบบ วน/ดด/ปป)</h3>
+                    <div>
+                        <h3 class="text-base font-bold text-slate-900">🗓️ ปฏิทินลางานส่วนกลางพนักงาน (รูปแบบ วน/ดด/ปป)</h3>
+                        <p class="text-slate-400 text-[11px] mt-0.5">💡 คุณสามารถคลิกเลือกช่องวันที่ในปฏิทินเพื่อยื่นใบลาในวันนั้นๆ ได้ทันที</p>
+                    </div>
                     <div class="flex items-center gap-2 bg-slate-100 p-1.5 rounded-xl text-xs font-semibold">
                         <button type="button" onclick="changeMonth(-1)" class="px-2 py-0.5 text-slate-500 hover:bg-white rounded-md cursor-pointer">◀</button>
                         <span id="emp-calendar-label" class="px-2 text-slate-800 text-center min-w-[100px]">-</span>
@@ -189,21 +192,6 @@
         </div>
 
         <div id="page-admin-dashboard" class="hidden space-y-6 max-w-6xl mx-auto">
-            
-            <div class="bg-white rounded-3xl border border-slate-200 shadow-2xs p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                <div class="space-y-1">
-                    <h2 class="text-base font-bold text-slate-900">🎨 ตั้งค่าระบบรูปภาพโลโก้องค์กร (System Logo)</h2>
-                    <p class="text-xs text-slate-500">อัปโหลดไฟล์ภาพเพื่อแสดงแทนแบรนด์หน้าแรกและเมนูระบบ รองรับ PNG, JPG, WEBP</p>
-                </div>
-                <div class="flex items-center gap-3">
-                    <label class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-2.5 px-4 rounded-xl shadow-md cursor-pointer transition-all">
-                        📁 เลือกไฟล์อัปโหลดโลโก้
-                        <input type="file" id="admin-logo-uploader" accept="image/*" onchange="uploadSystemLogo(event)" class="hidden">
-                    </label>
-                    <button onclick="resetSystemLogo()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs py-2.5 px-4 rounded-xl transition-all font-semibold">🔄 ใช้โลโก้เริ่มต้น</button>
-                </div>
-            </div>
-
             <div><h1 class="text-xl md:text-2xl font-bold text-slate-900">📊 แผงควบคุมและตรวจสอบสิทธิ์วันลาพนักงาน</h1><p class="text-xs text-slate-500">สรุปโควตาพนักงานแต่ละคน และรายงานผลรายเดือนจากคลาวด์</p></div>
             <div class="bg-white rounded-2xl border border-slate-200 shadow-xs p-5 space-y-3">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b pb-3">
@@ -242,6 +230,30 @@
             <h1 class="text-xl font-bold text-slate-900">📩 หน้าจัดการตรวจสอบพิจารณาคำขอลาพนักงาน</h1>
             <div id="admin-pending-requests-list" class="space-y-4"></div>
         </div>
+
+        <div id="page-admin-logo" class="hidden space-y-6 max-w-6xl mx-auto">
+            <div class="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 md:p-8 space-y-6">
+                <div class="space-y-2 border-b border-slate-100 pb-4">
+                    <h1 class="text-xl font-bold text-slate-900">🎨 ตั้งค่าระบบรูปภาพโลโก้องค์กร (System Logo)</h1>
+                    <p class="text-xs text-slate-500">อัปโหลดไฟล์ภาพเพื่อแสดงแทนแบรนด์หน้าแรกและเมนูระบบ รองรับไฟล์ประเภท PNG, JPG, WEBP</p>
+                </div>
+                <div class="flex flex-col md:flex-row items-center gap-6 p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                    <div class="w-24 h-24 bg-white rounded-2xl border border-slate-200 flex items-center justify-center p-2 shadow-xs shrink-0">
+                        <div id="setting-logo-preview" class="w-full h-full flex items-center justify-center"></div>
+                    </div>
+                    <div class="space-y-3 w-full">
+                        <p class="text-xs font-semibold text-slate-600">เลือกดำเนินการกับรูปภาพแบรนด์:</p>
+                        <div class="flex flex-wrap items-center gap-3">
+                            <label class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-2.5 px-4 rounded-xl shadow-md cursor-pointer transition-all">
+                                📁 เลือกไฟล์อัปโหลดโลโก้ใหม่
+                                <input type="file" id="admin-logo-uploader" accept="image/*" onchange="uploadSystemLogo(event)" class="hidden">
+                            </label>
+                            <button onclick="resetSystemLogo()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs py-2.5 px-4 rounded-xl transition-all font-semibold cursor-pointer">🔄 ใช้โลโก้เริ่มต้น</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
 
     <div id="popup-detail-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"><div class="bg-white w-full max-w-md rounded-2xl p-6 space-y-4"><div class="flex justify-between items-start"><div class="flex items-center gap-2.5"><div id="modal-icon" class="text-lg">🌴</div><div><h4 id="modal-title-name" class="text-sm font-bold">-</h4><p id="modal-subtitle-status" class="text-[10px]">-</p></div></div><button onclick="closeModalPopup()">✕</button></div><hr><div class="space-y-3 text-xs"><div><span class="text-slate-400 block text-[10px]">ประเภท</span><p id="modal-leave-type" class="font-bold">-</p></div><div><span class="text-slate-400 block text-[10px]">เวลา</span><p id="modal-leave-time">-</p></div><div id="modal-reason-wrapper" class="bg-slate-50 p-2.5 rounded-xl border"><span class="text-slate-400 block text-[10px]">เหตุผล</span><p id="modal-leave-reason" class="text-slate-600">-</p></div></div><button onclick="closeModalPopup()" class="w-full bg-slate-100 py-2 rounded-xl text-xs">ปิด</button></div></div>
@@ -249,7 +261,6 @@
     <div id="popup-edit-employee-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-950/40 p-4"><div class="bg-white w-full max-w-lg rounded-3xl p-6 space-y-5"><h3 class="font-bold">⚙️ แก้ไขข้อมูลและสิทธิ์โควตาพนักงาน</h3><form id="frm-admin-edit-emp" onsubmit="handleAdminEditEmpSubmit(event)"><input type="hidden" id="edit-emp-target-id"><div class="space-y-3"><div class="grid grid-cols-2 gap-2"><div><label class="text-xs">ชื่อจริง</label><input type="text" id="edit-emp-fname" class="w-full border p-2 rounded-xl"></div><div><label class="text-xs">นามสกุล</label><input type="text" id="edit-emp-lname" class="w-full border p-2 rounded-xl"></div></div><div class="grid grid-cols-3 gap-2"><div><label class="text-xs">ชื่อเล่น</label><input type="text" id="edit-emp-nname" class="w-full border p-2 rounded-xl"></div><div><label class="text-xs">เพศ</label><select id="edit-emp-gender" class="w-full border p-2 rounded-xl"><option value="ชาย">ชาย</option><option value="หญิง">หญิง</option></select></div><div><label class="text-xs">เบอร์โทร</label><input type="text" id="edit-emp-phone" class="w-full border p-2 rounded-xl"></div></div><div><label class="text-xs">วันเริ่มงาน</label><input type="date" id="edit-emp-startdate" class="w-full border p-2 rounded-xl"></div><div class="grid grid-cols-3 gap-2"><div><label class="text-[10px] font-bold">🌴 พักผ่อนสูงสุด</label><input type="number" id="edit-quota-vacation-max" class="w-full border p-2 rounded-xl text-center"></div><div><label class="text-[10px] font-bold">🤒 ป่วยสูงสุด</label><input type="number" id="edit-quota-sick-max" class="w-full border p-2 rounded-xl text-center"></div><div><label class="text-[10px] font-bold">💼 ลากิจสูงสุด</label><input type="number" id="edit-quota-personal-max" class="w-full border p-2 rounded-xl text-center"></div></div></div><div class="flex gap-2 pt-4"><button type="button" onclick="closeEditEmpModal()" class="flex-1 bg-slate-100 py-2 rounded-xl">ยกเลิก</button><button type="submit" class="flex-1 bg-slate-900 text-white py-2 rounded-xl">บันทึก</button></div></form></div></div>
 
     <script>
-        // คอนฟิกหลักเชื่อมต่อฐานข้อมูล Firebase Project 
         const firebaseConfig = {
             apiKey: "YOUR_API_KEY", 
             authDomain: "akrleave-9cd1e.firebaseapp.com",
@@ -277,20 +288,20 @@
         let quotaItemsPerPage = 5;
         let quotaCurrentPage = 1;
 
-        // ─── ✨ ฟังก์ชันจัดการเรื่องรูปภาพโลโก้แบรนด์ของระบบ (Local Storage Engine) ───
         function loadSystemLogo() {
             const savedLogo = localStorage.getItem("system_custom_logo");
             const loginContainer = document.getElementById("login-logo-container");
             const sidebarContainer = document.getElementById("sidebar-logo-container");
+            const settingPreview = document.getElementById("setting-logo-preview");
 
             if (savedLogo) {
-                // หากแอดมินเคยอัปโหลดไว้ ให้ดึงรูปนั้นมาจัดแสดงแทนจุดเดิมทั้งหมด
                 if (loginContainer) loginContainer.innerHTML = `<img src="${savedLogo}" class="w-16 h-16 object-contain rounded-2xl shadow-md">`;
                 if (sidebarContainer) sidebarContainer.innerHTML = `<img src="${savedLogo}" class="w-9 h-9 object-contain rounded-xl">`;
+                if (settingPreview) settingPreview.innerHTML = `<img src="${savedLogo}" class="w-full h-full object-contain rounded-xl">`;
             } else {
-                // หากไม่มี ให้ใช้ไอคอนแท็กเริ่มต้นดีไซน์เดิม
                 if (loginContainer) loginContainer.innerHTML = `<div class="w-14 h-14 bg-indigo-600 rounded-2xl flex items-center justify-center text-white text-2xl font-bold shadow-lg shadow-indigo-500/30">✨</div>`;
                 if (sidebarContainer) sidebarContainer.innerHTML = `<div class="w-9 h-9 bg-linear-to-tr from-indigo-500 to-violet-600 rounded-xl flex items-center justify-center text-white font-bold text-lg">L</div>`;
+                if (settingPreview) settingPreview.innerHTML = `<div class="w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center text-white text-xl font-bold">✨</div>`;
             }
         }
 
@@ -301,25 +312,24 @@
             const reader = new FileReader();
             reader.onload = function(e) {
                 const base64Image = e.target.result;
-                localStorage.setItem("system_custom_logo", base64Image); // บันทึกความจำถาวรลงฐานข้อมูลเว็บเบราว์เซอร์
-                loadSystemLogo(); // สั่งให้อัปเดตรีเฟรชโลโก้ทุกจุดทันทีแบบเรียลไทม์
+                localStorage.setItem("system_custom_logo", base64Image); 
+                loadSystemLogo(); 
                 showToastBox("อัปเดตรูปภาพโลโก้ระบบใหม่เรียบร้อยแล้วคราบ");
             };
             reader.readAsDataURL(file);
         }
 
         function resetSystemLogo() {
-            localStorage.removeItem("system_custom_logo"); // ล้างความจำรูปอัปโหลด
-            loadSystemLogo(); // รีเซ็ตกลับเป็นไอคอนประกายดาวเริ่มต้น
+            localStorage.removeItem("system_custom_logo"); 
+            loadSystemLogo(); 
             showToastBox("รีเซ็ตกลับไปใช้งานโลโก้เริ่มต้นเรียบร้อยแล้วคราบ");
         }
 
-        // ─── 🗓️ ฟังก์ชันจัดรูปแบบการแปลงวันที่ให้เป็น วัน/เดือน/ปี (dd/mm/yy) ───
         function formatToThaiDateStyle(isoDateString) {
             if (!isoDateString) return "-";
             const parts = isoDateString.split('-');
             if (parts.length !== 3) return isoDateString;
-            const year = parts[0].substring(2); // เอาปีท้าย 2 หลัก (เช่น 2026 -> 26)
+            const year = parts[0].substring(2); 
             const month = parts[1];
             const day = parts[2];
             return `${day}/${month}/${year}`;
@@ -365,7 +375,7 @@
         }
 
         function checkUserSessionAndListen() {
-            loadSystemLogo(); // โหลดเซ็ตค่าโลโก้ระบบตั้งแต่เริ่มเปิดหน้าจอ
+            loadSystemLogo(); 
             initAdminPersistenceAndListen();
 
             db.collection("employees").onSnapshot((snapshot) => {
@@ -444,7 +454,7 @@
             document.getElementById('main-content').classList.remove('hidden');
             document.getElementById('side-admin-links').classList.add('hidden');
             document.getElementById('side-emp-links').classList.add('hidden');
-            loadSystemLogo(); // ยืนยันโหลดโลโก้อีกครั้งหลังล็อกอินสำเร็จ
+            loadSystemLogo(); 
 
             if (loggedInUserSession.role === "admin") {
                 document.getElementById('side-user-name').innerText = loggedInUserSession.name;
@@ -470,7 +480,7 @@
             document.getElementById('main-content').classList.add('hidden');
             document.getElementById('page-login').classList.remove('hidden');
             toggleAuthBox('login');
-            loadSystemLogo(); // ล้างหน้าจอแล้วเรียกจัดแสดงโลโก้หน้า Login
+            loadSystemLogo(); 
             document.getElementById('login-username').value = "";
             document.getElementById('login-password').value = "";
         }
@@ -524,7 +534,7 @@
         }
 
         function navigateTo(targetPageId) {
-            const pages = ['page-login', 'page-emp-dashboard', 'page-emp-request-form', 'page-admin-dashboard', 'page-admin-employees', 'page-admin-requests'];
+            const pages = ['page-login', 'page-emp-dashboard', 'page-emp-request-form', 'page-admin-dashboard', 'page-admin-employees', 'page-admin-requests', 'page-admin-logo'];
             pages.forEach(p => { const el = document.getElementById(p); if(el) el.classList.add('hidden'); });
             
             if (targetPageId === 'page-login') return;
@@ -548,6 +558,8 @@
                 renderCrudEmployeeTable();
             } else if (targetPageId === 'page-admin-requests') {
                 renderAdminPendingRequests();
+            } else if (targetPageId === 'page-admin-logo') {
+                loadSystemLogo();
             }
             window.scrollTo(0, 0);
         }
@@ -558,7 +570,6 @@
             if (badge) { if (pendingCount > 0) { badge.innerText = pendingCount; badge.classList.remove('hidden'); } else { badge.classList.add('hidden'); } }
         }
 
-        // ─── 🛠️ แก้ไข Logic บั๊กปฏิทิน: รองรับการกระจายสีและสถานะวันลาครบทุกช่วงวัน (เช่น ลา 15-17 ก็จะโผล่ครบทุกวัน) ───
         function renderCalendarStructure(containerId, labelId) {
             const container = document.getElementById(containerId);
             const label = document.getElementById(labelId);
@@ -579,27 +590,44 @@
 
             for (let day = 1; day <= totalDaysInMonth; day++) {
                 const dayCell = document.createElement('div');
-                // สร้างรูปแบบ ISO YYYY-MM-DD เพื่อไปเช็คเงื่อนไข Match กับช่วงวันลาในระบบ
                 const currentIsoStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                dayCell.className = "bg-white p-1 border border-slate-200 min-h-[75px] text-left flex flex-col justify-between";
+                
+                if (containerId === 'emp-calendar-container') {
+                    dayCell.className = "bg-white p-1 border border-slate-200 min-h-[75px] text-left flex flex-col justify-between cursor-pointer hover:bg-indigo-50/40 transition-all rounded-sm group";
+                    dayCell.title = "คลิกเพื่อยื่นคำขอลาสำหรับวันที่ " + formatToThaiDateStyle(currentIsoStr);
+                    dayCell.onclick = (e) => {
+                        if (e.target.closest('.leave-badge')) return; 
+                        selectDateFromCalendar(currentIsoStr);
+                    };
+                } else {
+                    dayCell.className = "bg-white p-1 border border-slate-200 min-h-[75px] text-left flex flex-col justify-between";
+                }
 
+                const dayNumHeader = document.createElement('div');
+                dayNumHeader.className = "flex justify-between items-center w-full";
+                
                 const dayNumSpan = document.createElement('span');
-                dayNumSpan.className = "text-slate-800 font-bold text-[10px] block"; dayNumSpan.innerText = day;
-                dayCell.appendChild(dayNumSpan);
+                dayNumSpan.className = "text-slate-800 font-bold text-[10px] block"; 
+                dayNumSpan.innerText = day;
+                dayNumHeader.appendChild(dayNumSpan);
+                
+                if (containerId === 'emp-calendar-container') {
+                    const quickAddIcon = document.createElement('span');
+                    quickAddIcon.className = "text-[10px] text-indigo-500 opacity-0 group-hover:opacity-100 font-medium transition-all";
+                    quickAddIcon.innerText = "✍️ ลา";
+                    dayNumHeader.appendChild(quickAddIcon);
+                }
+                
+                dayCell.appendChild(dayNumHeader);
 
                 const badgesWrapper = document.createElement('div');
                 badgesWrapper.className = "space-y-1 mt-1 flex-1 overflow-y-auto max-h-[50px]";
 
-                // ตรรกะใหม่สแกนหาคำขอลาที่คาบเกี่ยวครอบคลุมมาถึงวันที่นี้ในช่องปฏิทิน
                 const matchingLeaves = leaveDatabase.filter(leave => {
                     if (leave.status !== 'approved' && leave.status !== 'pending') return false;
-                    
                     const cDate = new Date(currentIsoStr); cDate.setHours(0,0,0,0);
                     const sDate = new Date(leave.date); sDate.setHours(0,0,0,0);
-                    // หากมี endDate ช่วงสิ้นสุดให้ใช้ค่า endDate หากไม่มี (ลาวันเดียว) ให้ใช้ตัวแปร date เหมือนเดิม
                     let eDate = leave.endDate ? new Date(leave.endDate) : new Date(leave.date); eDate.setHours(0,0,0,0);
-                    
-                    // เงื่อนไข: วันที่ในช่องปฏิทิน (cDate) ต้องอยู่ระหว่างวันเริ่ม (sDate) และวันสิ้นสุด (eDate) พอดี
                     return cDate >= sDate && cDate <= eDate;
                 });
 
@@ -611,23 +639,33 @@
                         const nicknames = approvedGroup.map(x => { const matchEmp = employeeDatabase.find(e => e.username === x.username); return matchEmp ? matchEmp.nickName : x.name.replace("คุณ", "").split(" ")[0]; });
                         const uniqueNicknames = [...new Set(nicknames)].join(", ");
                         const bNode = document.createElement('div');
-                        bNode.className = "cursor-pointer rounded p-1 text-[9px] font-black border bg-blue-50 text-blue-700 border-blue-200 truncate text-center";
+                        bNode.className = "leave-badge cursor-pointer rounded p-1 text-[9px] font-black border bg-blue-50 text-blue-700 border-blue-200 truncate text-center";
                         bNode.innerHTML = `🟢 ลา: ${uniqueNicknames}`;
-                        bNode.onclick = () => { openModalPopup(approvedGroup[0]); };
+                        bNode.onclick = (e) => { e.stopPropagation(); openModalPopup(approvedGroup[0]); };
                         badgesWrapper.appendChild(bNode);
                     }
                     if (pendingGroup.length > 0) {
                         const nicknamesPending = pendingGroup.map(x => { const matchEmp = employeeDatabase.find(e => e.username === x.username); return matchEmp ? matchEmp.nickName : x.name.replace("คุณ", "").split(" ")[0]; });
                         const uniqueNicknamesPending = [...new Set(nicknamesPending)].join(", ");
                         const bNode = document.createElement('div');
-                        bNode.className = "cursor-pointer rounded p-1 text-[9px] font-bold border bg-amber-50 text-amber-700 border-amber-200 truncate text-center animate-pulse";
+                        bNode.className = "leave-badge cursor-pointer rounded p-1 text-[9px] font-bold border bg-amber-50 text-amber-700 border-amber-200 truncate text-center animate-pulse";
                         bNode.innerHTML = `⏳ รอ: ${uniqueNicknamesPending}`;
-                        bNode.onclick = () => { openModalPopup(pendingGroup[0]); };
+                        bNode.onclick = (e) => { e.stopPropagation(); openModalPopup(pendingGroup[0]); };
                         badgesWrapper.appendChild(bNode);
                     }
                 }
                 dayCell.appendChild(badgesWrapper); container.appendChild(dayCell);
             }
+        }
+
+        function selectDateFromCalendar(isoDateString) {
+            navigateTo('page-emp-request-form');
+            
+            document.getElementById('f-start-date').value = isoDateString;
+            document.getElementById('f-end-date').value = isoDateString;
+            document.getElementById('f-hour-date').value = isoDateString;
+            
+            calcFullPageSummary();
         }
 
         function changeMonth(direction) {
@@ -654,7 +692,6 @@
                 const tr = document.createElement('tr'); tr.className = "hover:bg-slate-50 border-b";
                 let statusBadge = item.status === 'approved' ? `<span class="bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-md font-bold text-[10px]">🟢 อนุมัติ</span>` : (item.status === 'pending' ? `<span class="bg-amber-50 text-amber-700 px-2 py-0.5 rounded-md font-bold text-[10px] animate-pulse">⏳ รออนุมัติ</span>` : `<span class="bg-rose-50 text-rose-600 px-2 py-0.5 rounded-md font-bold text-[10px]">🔴 ปฏิเสธ</span>`);
                 
-                // ปรับแสดงผลช่วงวันในตารางให้เป็น วัน/เดือน/ปี (dd/mm/yy)
                 let rangeDisplay = item.endDate && item.endDate !== item.date ? `${formatToThaiDateStyle(item.date)} ถึง ${formatToThaiDateStyle(item.endDate)}` : formatToThaiDateStyle(item.date);
                 
                 tr.innerHTML = `<td class="px-4 py-3 font-semibold text-slate-900">${rangeDisplay}</td><td class="px-4 py-3 font-medium">${item.name}</td><td class="px-4 py-3 text-indigo-600 font-semibold">${item.type}</td><td class="px-4 py-3">${item.timeLabel} (${item.daysCount} วัน)</td><td class="px-4 py-3 text-slate-500 max-w-xs truncate">${item.reason}</td><td class="px-4 py-3 text-center">${statusBadge}</td>`;
@@ -667,7 +704,6 @@
             document.getElementById('modal-title-name').innerText = leaveObj.name;
             document.getElementById('modal-leave-type').innerText = leaveObj.type;
             
-            // ปรับวันลาในกล่องกดแสดงรายละเอียดให้แสดงผลแบบ dd/mm/yy ด้วยเช่นกัน
             let cleanStartDate = formatToThaiDateStyle(leaveObj.date);
             let cleanEndDate = formatToThaiDateStyle(leaveObj.endDate);
             document.getElementById('modal-leave-time').innerText = `ช่วงวันที่: ${leaveObj.endDate && leaveObj.endDate !== leaveObj.date ? cleanStartDate+' ถึง '+cleanEndDate : cleanStartDate} | ${leaveObj.timeLabel}`;
