@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enterprise Leave Management System Pro Ultra</title>
+    <title>ระบบบริหารจัดการวันลา</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -26,12 +26,13 @@
         <button onclick="document.getElementById('toast-notification').classList.add('hidden')" class="text-slate-400 hover:text-white text-xs ml-2">✕</button>
     </div>
 
+    <!-- แก้ไขข้อที่ 1: เปลี่ยนชื่อหน้าแรกเป็นภาษาไทยอย่างเดียว -->
     <div id="page-login" class="fixed inset-0 z-50 flex items-center justify-center bg-linear-to-tr from-slate-900 via-indigo-950 to-slate-900 px-4 overflow-y-auto py-10">
         <div id="login-box" class="w-full max-w-md bg-white/95 p-8 rounded-3xl shadow-2xl backdrop-blur-md border border-white/20 text-center space-y-6 my-auto">
             <div>
-                <div class="mx-auto w-14 h-14 bg-indigo-600 rounded-2xl flex items-center justify-center text-white text-2xl font-bold shadow-lg shadow-indigo-500/30">✨</div>
-                <h2 class="mt-4 text-2xl font-bold text-slate-900 tracking-tight">Portal Log In</h2>
-                <p class="text-xs text-slate-500 mt-1">ระบบบริหารจัดการวันลาและฐานข้อมูลพนักงานอัจฉริยะ</p>
+                <!-- แก้ไขข้อที่ 2: เพิ่ม ID รองรับการเปลี่ยนโลโก้ -->
+                <div id="login-logo-container" class="mx-auto w-14 h-14 bg-indigo-600 rounded-2xl flex items-center justify-center text-white text-2xl font-bold shadow-lg shadow-indigo-500/30">✨</div>
+                <h2 class="mt-4 text-2xl font-bold text-slate-900 tracking-tight">ระบบบริหารจัดการวันลา</h2>
             </div>
             <form class="space-y-4 text-left" onsubmit="return handleLoginSubmit(event)">
                 <div>
@@ -86,9 +87,10 @@
 
     <aside id="main-sidebar" class="hidden w-full md:w-64 bg-slate-900 text-slate-400 p-6 flex flex-col justify-between shrink-0 border-r border-slate-800">
         <div class="space-y-8">
+            <!-- แก้ไขข้อที่ 2: เปลี่ยนชื่อเป็น ระบบวันลา และเพิ่ม ID ผูกภาพโลโก้ใหม่ -->
             <div class="flex items-center gap-3 text-white">
-                <div class="w-9 h-9 bg-linear-to-tr from-indigo-500 to-violet-600 rounded-xl flex items-center justify-center text-white font-bold text-lg">L</div>
-                <span class="font-bold tracking-wider text-sm">LEAVE PORTAL</span>
+                <div id="sidebar-logo-container" class="w-9 h-9 bg-linear-to-tr from-indigo-500 to-violet-600 rounded-xl flex items-center justify-center text-white font-bold text-lg">L</div>
+                <span class="font-bold tracking-wider text-sm">ระบบวันลา</span>
             </div>
             <div class="bg-slate-800/50 p-4 rounded-2xl border border-slate-800 flex items-center gap-3">
                 <div class="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center font-bold text-xs">User</div>
@@ -186,6 +188,18 @@
         </div>
 
         <div id="page-admin-dashboard" class="hidden space-y-6 max-w-6xl mx-auto">
+            <!-- แก้ไขข้อที่ 2: เพิ่มชุดปุ่มสำหรับ Upload และจัดการ Logo ในหน้า Admin -->
+            <div class="bg-white rounded-2xl border border-slate-200 p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 shadow-2xs">
+                <div>
+                    <h3 class="text-sm font-bold text-slate-800">⚙️ ตั้งค่าระบบเปลี่ยนโลโก้</h3>
+                    <p class="text-xs text-slate-400">อัพโหลดรูปภาพเพื่อใช้แสดงเป็นโลโก้หลักของระบบแทนไอคอนเดิม</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <input type="file" id="admin-logo-upload" accept="image/*" onchange="uploadLogoImage(event)" class="text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer">
+                    <button onclick="removeLogoImage()" class="text-xs text-rose-600 font-medium hover:underline cursor-pointer">ใช้ค่าเริ่มต้น</button>
+                </div>
+            </div>
+
             <div><h1 class="text-xl md:text-2xl font-bold text-slate-900">📊 แผงควบคุมและตรวจสอบสิทธิ์วันลาพนักงาน</h1><p class="text-xs text-slate-500">สรุปโควตาพนักงานแต่ละคน และรายงานผลรายเดือนจากคลาวด์</p></div>
             <div class="bg-white rounded-2xl border border-slate-200 shadow-xs p-5 space-y-3">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b pb-3">
@@ -224,12 +238,11 @@
         </div>
     </main>
 
-    <div id="popup-detail-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"><div class="bg-white w-full max-w-md rounded-2xl p-6 space-y-4"><div class="flex justify-between items-start"><div class="flex items-center gap-2.5"><div id="modal-icon" class="text-lg">🌴</div><div><h4 id="modal-title-name" class="text-sm font-bold">-</h4><p id="modal-subtitle-status" class="text-[10px]">-</p></div></div><button onclick="closeModalPopup()">✕</button></div><hr><div class="space-y-3 text-xs"><div><span class="text-slate-400 block text-[10px]">ประเภท</span><p id="modal-leave-type" class="font-bold">-</p></div><div><span class="text-slate-400 block text-[10px]">เวลา</span><p id="modal-leave-time">-</p></div><div id="modal-reason-wrapper" class="bg-slate-50 p-2.5 rounded-xl border"><span class="text-slate-400 block text-[10px]">เหตุผล</span><p id="modal-leave-reason" class="text-slate-600">-</p></div></div><button onclick="closeModalPopup()" class="w-full bg-slate-100 py-2 rounded-xl text-xs">ปิด</button></div></div>
+    <div id="popup-detail-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"><div class="bg-white w-full max-w-md rounded-2xl p-6 space-y-4"><div class="flex justify-between items-start"><div class="flex items-center gap-2.5"><div id="modal-icon" class="text-lg">🌴</div><div><h4 id="modal-title-name" class="text-sm font-bold">-</h4><p id="modal-subtitle-status" class="text-[10px]">-</p></div></div><button onclick="closeModalPopup()">✕</button></div><hr><div class="space-y-3 text-xs"><div><span class="text-slate-400 block text-[10px]">ประเภท</span><p id="modal-leave-type" class="font-bold">-</p></div><div><span class="text-slate-400 block text-[10px]">เวลา</span><p id="modal-leave-time">-</p></div><div id="modal-reason-wrapper" class="bg-slate-50 p-2.5 rounded-xl border"><span class="text-slate-400 block text-[10px]">เหตุผล</span><p id="modal-leave-reason" class="text-slate-600">-</p></div></div><button onclick="closeModalPopup()" class="w-full bg-slate-100 py-2 rounded-xl text-xs">🔒 ปิด</button></div></div>
     <div id="medical-cert-alert-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"><div class="bg-white w-full max-w-md rounded-3xl p-6 text-center space-y-4"><h3>📋 แจ้งเตือนใบรับรองแพทย์</h3><p class="text-xs text-slate-500">เนื่องจากคุณลาป่วยติดต่อกันตั้งแต่ 3 วันขึ้นไป ต้องส่งมอบเอกสารใบรับรองแพทย์ด้วยครับ</p><button onclick="closeMedicalAlertModal()" class="w-full bg-slate-900 text-white py-2 rounded-xl text-xs">รับทราบ</button></div></div>
     <div id="popup-edit-employee-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-950/40 p-4"><div class="bg-white w-full max-w-lg rounded-3xl p-6 space-y-5"><h3 class="font-bold">⚙️ แก้ไขข้อมูลและสิทธิ์โควตาพนักงาน</h3><form id="frm-admin-edit-emp" onsubmit="handleAdminEditEmpSubmit(event)"><input type="hidden" id="edit-emp-target-id"><div class="space-y-3"><div class="grid grid-cols-2 gap-2"><div><label class="text-xs">ชื่อจริง</label><input type="text" id="edit-emp-fname" class="w-full border p-2 rounded-xl"></div><div><label class="text-xs">นามสกุล</label><input type="text" id="edit-emp-lname" class="w-full border p-2 rounded-xl"></div></div><div class="grid grid-cols-3 gap-2"><div><label class="text-xs">ชื่อเล่น</label><input type="text" id="edit-emp-nname" class="w-full border p-2 rounded-xl"></div><div><label class="text-xs">เพศ</label><select id="edit-emp-gender" class="w-full border p-2 rounded-xl"><option value="ชาย">ชาย</option><option value="หญิง">หญิง</option></select></div><div><label class="text-xs">เบอร์โทร</label><input type="text" id="edit-emp-phone" class="w-full border p-2 rounded-xl"></div></div><div><label class="text-xs">วันเริ่มงาน</label><input type="date" id="edit-emp-startdate" class="w-full border p-2 rounded-xl"></div><div class="grid grid-cols-3 gap-2"><div><label class="text-[10px] font-bold">🌴 พักผ่อนสูงสุด</label><input type="number" id="edit-quota-vacation-max" class="w-full border p-2 rounded-xl text-center"></div><div><label class="text-[10px] font-bold">🤒 ป่วยสูงสุด</label><input type="number" id="edit-quota-sick-max" class="w-full border p-2 rounded-xl text-center"></div><div><label class="text-[10px] font-bold">💼 ลากิจสูงสุด</label><input type="number" id="edit-quota-personal-max" class="w-full border p-2 rounded-xl text-center"></div></div></div><div class="flex gap-2 pt-4"><button type="button" onclick="closeEditEmpModal()" class="flex-1 bg-slate-100 py-2 rounded-xl">ยกเลิก</button><button type="submit" class="flex-1 bg-slate-900 text-white py-2 rounded-xl">บันทึก</button></div></form></div></div>
 
     <script>
-        // Config เชื่อมโยงกับ Firebase Project ของคุณ
         const firebaseConfig = {
             apiKey: "YOUR_API_KEY", 
             authDomain: "akeleave-9cd1e.firebaseapp.com",
@@ -245,7 +258,7 @@
         let loggedInUserSession = null;
         let employeeDatabase = [];
         let leaveDatabase = [];
-        let adminDatabase = []; // แอดมินดาต้าเบสที่ดึงลงมาจากคลาวด์
+        let adminDatabase = []; 
 
         let currentCalendarDate = new Date();
         let currentFormPageMode = "full";
@@ -256,6 +269,15 @@
         let quotaSortOrder = 'asc';
         let quotaItemsPerPage = 5;
         let quotaCurrentPage = 1;
+
+        // แก้ไขข้อที่ 4: เพิ่มฟังก์ชันแปลงรูปแบบวันที่ YYYY-MM-DD เป็น dd/mm/yy
+        function formatDateThaiShort(dateStr) {
+            if (!dateStr) return "-";
+            const parts = dateStr.split('-');
+            if (parts.length !== 3) return dateStr;
+            const yy = parts[0].substring(2); 
+            return `${parts[2]}/${parts[1]}/${yy}`; 
+        }
 
         function calculateWorkAgeDetailed(startDateString) {
             if (!startDateString) return "-";
@@ -271,13 +293,11 @@
             return `${years} ปี ${months} เดือน ${days} วัน`;
         }
 
-        // ─── ✨ ฟังก์ชันอัจฉริยะ: ดึงข้อมูลแอดมินจากคลาวด์ & สร้างบัญชีตั้งต้นหากยังว่างเปล่า ───
         function initAdminPersistenceAndListen() {
             db.collection("admins").onSnapshot((snapshot) => {
                 adminDatabase = [];
                 snapshot.forEach((doc) => { adminDatabase.push(doc.data()); });
 
-                // ⭐ ตรวจสอบ: หากใน Firestore ยังไม่มีเอกสารแอดมินอยู่เลย ให้สร้างบัญชีหลัก admin/admin อัตโนมัติทันที
                 if (adminDatabase.length === 0) {
                     const defaultAdmin = { username: "admin", password: "admin", name: "ผู้ดูแลระบบสูงสุด (HR)" };
                     db.collection("admins").doc("admin").set(defaultAdmin).then(() => {
@@ -285,12 +305,10 @@
                     });
                 }
 
-                // เช็คประวัติความจำ Login ค้างไว้ (Session Persistence หลังรีเฟรช)
                 const savedSession = localStorage.getItem("user_leave_session");
                 if (savedSession && !loggedInUserSession) {
                     const parsed = JSON.parse(savedSession);
                     if (parsed.role === "admin") {
-                        // ดึงข้อมูลแอดมินตัวล่าสุดจากคลาวด์เพื่อความปลอดภัย
                         const freshAdmin = adminDatabase.find(x => x.username === parsed.username);
                         if (freshAdmin) {
                             loggedInUserSession = { role: "admin", username: freshAdmin.username, name: freshAdmin.name };
@@ -302,9 +320,28 @@
             });
         }
 
-        // โหลดข้อมูลพนักงาน และใบลา Realtime
         function checkUserSessionAndListen() {
-            initAdminPersistenceAndListen(); // สั่งรันระบบแอดมินคลาวด์ก่อน
+            initAdminPersistenceAndListen(); 
+
+            // แก้ไขข้อที่ 2: ติดตามสถิติโลโก้จาก Firebase แบบ Realtime ทันทีเมื่อเปิดระบบ
+            db.collection("config").doc("logo").onSnapshot((doc) => {
+                const loginLogo = document.getElementById('login-logo-container');
+                const sideLogo = document.getElementById('sidebar-logo-container');
+                if (doc.exists && doc.data().base64) {
+                    const base64Data = doc.data().base64;
+                    loginLogo.innerHTML = `<img src="${base64Data}" class="w-full h-full object-cover rounded-2xl">`;
+                    loginLogo.className = "mx-auto w-14 h-14 rounded-2xl shadow-lg overflow-hidden flex items-center justify-center";
+                    
+                    sideLogo.innerHTML = `<img src="${base64Data}" class="w-full h-full object-cover rounded-xl">`;
+                    sideLogo.className = "w-9 h-9 rounded-xl overflow-hidden flex items-center justify-center";
+                } else {
+                    loginLogo.innerHTML = "✨";
+                    loginLogo.className = "mx-auto w-14 h-14 bg-indigo-600 rounded-2xl flex items-center justify-center text-white text-2xl font-bold shadow-lg shadow-indigo-500/30";
+                    
+                    sideLogo.innerHTML = "L";
+                    sideLogo.className = "w-9 h-9 bg-linear-to-tr from-indigo-500 to-violet-600 rounded-xl flex items-center justify-center text-white font-bold text-lg";
+                }
+            });
 
             db.collection("employees").onSnapshot((snapshot) => {
                 employeeDatabase = [];
@@ -350,13 +387,35 @@
 
         checkUserSessionAndListen();
 
-        // ─── 🔑 ระบบพิสูจน์สิทธิ์แบบใหม่ ดึงข้อมูลแอดมินจาก Firestore ───
+        // แก้ไขข้อที่ 2: ฟังก์ชันอัพโหลดและลบรูปภาพโลโก้
+        function uploadLogoImage(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            if (file.size > 2 * 1024 * 1024) { alert("❌ ขนาดไฟล์ภาพต้องไม่เกิน 2MB คราบ"); return; }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64Str = e.target.result;
+                db.collection("config").doc("logo").set({ base64: base64Str })
+                    .then(() => alert("🎉 อัพโหลดโลโก้ระบบสำเร็จเรียบร้อยแล้วคราบ!"))
+                    .catch(err => alert("เกิดข้อผิดพลาด: " + err.message));
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function removeLogoImage() {
+            if (confirm("ต้องการลบรูปโลโก้และกลับไปใช้ค่าเริ่มต้นใช่หรือไม่?")) {
+                db.collection("config").doc("logo").delete().then(() => {
+                    document.getElementById('admin-logo-upload').value = "";
+                });
+            }
+        }
+
         function handleLoginSubmit(event) {
             event.preventDefault();
             const uField = document.getElementById('login-username').value.trim().toLowerCase();
             const pField = document.getElementById('login-password').value;
 
-            // ค้นหาบัญชีแอดมินจากฐานข้อมูลคลาวด์
             const matchAdmin = adminDatabase.find(x => x.username === uField && x.password === pField);
 
             if (matchAdmin) {
@@ -365,7 +424,6 @@
                 enterMainPortal();
                 navigateTo('page-admin-dashboard');
             } else {
-                // ถ้าไม่พบแอดมิน ให้ไปค้นฝั่งพนักงาน
                 const emp = employeeDatabase.find(x => x.username === uField && x.password === pField);
                 if (emp) {
                     loggedInUserSession = { role: "employee", data: emp };
@@ -498,6 +556,7 @@
             if (badge) { if (pendingCount > 0) { badge.innerText = pendingCount; badge.classList.remove('hidden'); } else { badge.classList.add('hidden'); } }
         }
 
+        // แก้ไขข้อที่ 3: ปรับปรุงโครงสร้างตรวจสอบวันที่เพื่อรองรับช่วงการลามัลติเดย์แบบสมบูรณ์
         function renderCalendarStructure(containerId, labelId) {
             const container = document.getElementById(containerId);
             const label = document.getElementById(labelId);
@@ -518,7 +577,6 @@
 
             for (let day = 1; day <= totalDaysInMonth; day++) {
                 const dayCell = document.createElement('div');
-                const currentIsoStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
                 dayCell.className = "bg-white p-1 border border-slate-200 min-h-[75px] text-left flex flex-col justify-between";
 
                 const dayNumSpan = document.createElement('span');
@@ -528,11 +586,20 @@
                 const badgesWrapper = document.createElement('div');
                 badgesWrapper.className = "space-y-1 mt-1 flex-1 overflow-y-auto max-h-[50px]";
 
+                // แก้ไขการเปรียบเทียบเงื่อนไขวันที่ใน Object ให้รองรับแบบ Local Timezone โดยตรง
                 const matchingLeaves = leaveDatabase.filter(leave => {
                     if (leave.status !== 'approved' && leave.status !== 'pending') return false;
-                    const cDate = new Date(currentIsoStr); cDate.setHours(0,0,0,0);
-                    const sDate = new Date(leave.date); sDate.setHours(0,0,0,0);
-                    let eDate = leave.endDate ? new Date(leave.endDate) : new Date(leave.date); eDate.setHours(0,0,0,0);
+                    
+                    const cDate = new Date(year, month, day);
+                    
+                    const sParts = leave.date.split('-');
+                    const sDate = new Date(parseInt(sParts[0]), parseInt(sParts[1]) - 1, parseInt(sParts[2]));
+                    
+                    let eDate = sDate;
+                    if (leave.endDate) {
+                        const eParts = leave.endDate.split('-');
+                        eDate = new Date(parseInt(eParts[0]), parseInt(eParts[1]) - 1, parseInt(eParts[2]));
+                    }
                     return cDate >= sDate && cDate <= eDate;
                 });
 
@@ -571,6 +638,7 @@
             }
         }
 
+        // แก้ไขข้อที่ 4: เปลี่ยนการแสดงผลรายงานในหน้าแอดมินเป็น dd/mm/yy
         function renderAdminMonthlyLeaveList() {
             const tbody = document.getElementById('admin-monthly-leave-list-body');
             const monthLabel = document.getElementById('admin-list-month-label');
@@ -586,17 +654,22 @@
             monthlyLeaves.forEach(item => {
                 const tr = document.createElement('tr'); tr.className = "hover:bg-slate-50 border-b";
                 let statusBadge = item.status === 'approved' ? `<span class="bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-md font-bold text-[10px]">🟢 อนุมัติ</span>` : (item.status === 'pending' ? `<span class="bg-amber-50 text-amber-700 px-2 py-0.5 rounded-md font-bold text-[10px] animate-pulse">⏳ รออนุมัติ</span>` : `<span class="bg-rose-50 text-rose-600 px-2 py-0.5 rounded-md font-bold text-[10px]">🔴 ปฏิเสธ</span>`);
-                let rangeDisplay = item.endDate && item.endDate !== item.date ? `${item.date} ถึง ${item.endDate}` : item.date;
+                let rangeDisplay = item.endDate && item.endDate !== item.date ? `${formatDateThaiShort(item.date)} ถึง ${formatDateThaiShort(item.endDate)}` : formatDateThaiShort(item.date);
                 tr.innerHTML = `<td class="px-4 py-3 font-semibold text-slate-900">${rangeDisplay}</td><td class="px-4 py-3 font-medium">${item.name}</td><td class="px-4 py-3 text-indigo-600 font-semibold">${item.type}</td><td class="px-4 py-3">${item.timeLabel} (${item.daysCount} วัน)</td><td class="px-4 py-3 text-slate-500 max-w-xs truncate">${item.reason}</td><td class="px-4 py-3 text-center">${statusBadge}</td>`;
                 tbody.appendChild(tr);
             });
         }
 
+        // แก้ไขข้อที่ 4: เปลี่ยนรูปแบบวันที่ใน Modal Popup เป็น dd/mm/yy
         function openModalPopup(leaveObj) {
             document.getElementById('modal-icon').innerText = leaveObj.icon || "✨";
             document.getElementById('modal-title-name').innerText = leaveObj.name;
             document.getElementById('modal-leave-type').innerText = leaveObj.type;
-            document.getElementById('modal-leave-time').innerText = `ช่วงวันที่: ${leaveObj.endDate && leaveObj.endDate !== leaveObj.date ? leaveObj.date+' ถึง '+leaveObj.endDate : leaveObj.date} | ${leaveObj.timeLabel}`;
+            
+            let formattedStart = formatDateThaiShort(leaveObj.date);
+            let formattedEnd = formatDateThaiShort(leaveObj.endDate);
+            document.getElementById('modal-leave-time').innerText = `ช่วงวันที่: ${leaveObj.endDate && leaveObj.endDate !== leaveObj.date ? formattedStart+' ถึง '+formattedEnd : formattedStart} | ${leaveObj.timeLabel}`;
+            
             document.getElementById('modal-subtitle-status').innerHTML = leaveObj.status === 'pending' ? `<span class="text-amber-600 font-bold">⏳ อยู่ระหว่างรออนุมัติ</span>` : `<span class="text-emerald-600 font-bold">🟢 อนุมัติแล้ว</span>`;
             const reasonWrapper = document.getElementById('modal-reason-wrapper');
             if (loggedInUserSession && loggedInUserSession.role === 'admin') { reasonWrapper.classList.remove('hidden'); document.getElementById('modal-leave-reason').innerText = leaveObj.reason; } else { reasonWrapper.classList.add('hidden'); }
@@ -604,6 +677,7 @@
         }
         function closeModalPopup() { document.getElementById('popup-detail-modal').classList.add('hidden'); }
 
+        // แก้ไขข้อที่ 4: เปลี่ยนการแสดงผลวันเริ่มงานตารางพนักงานเป็น dd/mm/yy
         function renderCrudEmployeeTable() {
             const tbody = document.getElementById('crud-employee-rows'); if (!tbody) return; tbody.innerHTML = "";
             if (employeeDatabase.length === 0) { tbody.innerHTML = `<tr><td colspan="5" class="px-4 py-8 text-center text-slate-400 italic">ไม่มีข้อมูลพนักงานคราบ</td></tr>`; return; }
@@ -614,7 +688,7 @@
                     <td class="px-4 py-3.5"><p class="font-bold text-slate-900">${emp.username}</p><p class="text-[10px] text-slate-400">ID: ${emp.id}</p></td>
                     <td class="px-4 py-3.5 font-semibold text-slate-800">คุณ${emp.firstName} ${emp.lastName} (${emp.nickName})</td>
                     <td class="px-4 py-3.5 text-slate-500">เพศ: ${emp.gender} | 📞 โทร: ${emp.phone}</td>
-                    <td class="px-4 py-3.5 font-medium text-slate-600">เริ่ม: ${emp.startDate}<br><span class="text-[11px] text-indigo-600 font-bold">${calculateWorkAgeDetailed(emp.startDate)}</span></td>
+                    <td class="px-4 py-3.5 font-medium text-slate-600">เริ่ม: ${formatDateThaiShort(emp.startDate)}<br><span class="text-[11px] text-indigo-600 font-bold">${calculateWorkAgeDetailed(emp.startDate)}</span></td>
                     <td class="px-4 py-3.5 text-center flex flex-wrap items-center justify-center gap-1.5">
                         <button onclick="openEditEmpModal('${emp.username}')" class="bg-indigo-50 text-indigo-700 border px-2.5 py-1.5 rounded-xl text-xs">✏️ แก้ไข</button>
                         <button onclick="resetEmployeePassword('${emp.username}')" class="bg-amber-50 text-amber-700 border px-2.5 py-1.5 rounded-xl text-xs">🔄 รีเซ็ต</button>
@@ -636,6 +710,7 @@
         function closeEditEmpModal() { document.getElementById('popup-edit-employee-modal').classList.add('hidden'); }
         function handleAdminEditEmpSubmit(e) { e.preventDefault(); const target = document.getElementById('edit-emp-target-id').value; const updatedData = { firstName: document.getElementById('edit-emp-fname').value.trim(), lastName: document.getElementById('edit-emp-lname').value.trim(), nickName: document.getElementById('edit-emp-nname').value.trim(), gender: document.getElementById('edit-emp-gender').value, phone: document.getElementById('edit-emp-phone').value.trim(), startDate: document.getElementById('edit-emp-startdate').value, leaveVacationMax: parseFloat(document.getElementById('edit-quota-vacation-max').value || 0), leaveSickMax: parseFloat(document.getElementById('edit-quota-sick-max').value || 0), leavePersonalMax: parseFloat(document.getElementById('edit-quota-personal-max').value || 0) }; db.collection("employees").doc(target).update(updatedData).then(() => { closeEditEmpModal(); }); }
 
+        // แก้ไขข้อที่ 4: เปลี่ยนการแสดงผลวันที่หน้าพิจารณาคำขออนุมัติของแอดมินเป็น dd/mm/yy
         function renderAdminPendingRequests() {
             const container = document.getElementById('admin-pending-requests-list'); if (!container) return; container.innerHTML = "";
             const pendingItems = leaveDatabase.filter(x => x.status === 'pending');
@@ -644,7 +719,12 @@
             pendingItems.forEach(req => {
                 const card = document.createElement('div'); card.className = "bg-white border rounded-3xl p-5 flex flex-col md:flex-row justify-between gap-4 items-start md:items-center";
                 let medWarning = req.type.includes("ลาป่วย") && req.daysCount >= 3 ? `<div class="mt-2 bg-amber-50 text-amber-800 p-2.5 text-xs rounded-xl border">⚠️ <strong>ต้องมีใบรับรองแพทย์</strong> (เนื่องจากลาป่วยติดต่อกันตั้งแต่ 3 วันขึ้นไป)</div>` : "";
-                card.innerHTML = `<div class="w-full"><span class="text-sm font-bold">${req.name}</span><p class="text-xs">ประเภท: <span class="text-indigo-600">${req.type}</span> | วันที่ลา: ${req.endDate ? req.date+' ถึง '+req.endDate : req.date} (${req.timeLabel})</p><div class="text-xs bg-slate-50 p-2 border rounded-xl mt-1">"${req.reason}"</div>${medWarning}</div><div class="flex items-center gap-2 pt-2 md:pt-0"><button onclick="processApprovalAction('${req.docId}', 'approved')" class="bg-emerald-600 text-white text-xs px-4 py-2 rounded-xl font-bold">🟢 อนุมัติ</button><button onclick="processApprovalAction('${req.docId}', 'rejected')" class="bg-rose-100 text-rose-700 text-xs px-4 py-2 rounded-xl font-bold">🔴 ไม่อนุมัติ</button></div>`;
+                
+                let formattedStart = formatDateThaiShort(req.date);
+                let formattedEnd = formatDateThaiShort(req.endDate);
+                let displayRange = req.endDate && req.endDate !== req.date ? formattedStart+' ถึง '+formattedEnd : formattedStart;
+                
+                card.innerHTML = `<div class="w-full"><span class="text-sm font-bold">${req.name}</span><p class="text-xs">ประเภท: <span class="text-indigo-600">${req.type}</span> | วันที่ลา: ${displayRange} (${req.timeLabel})</p><div class="text-xs bg-slate-50 p-2 border rounded-xl mt-1">"${req.reason}"</div>${medWarning}</div><div class="flex items-center gap-2 pt-2 md:pt-0"><button onclick="processApprovalAction('${req.docId}', 'approved')" class="bg-emerald-600 text-white text-xs px-4 py-2 rounded-xl font-bold">🟢 อนุมัติ</button><button onclick="processApprovalAction('${req.docId}', 'rejected')" class="bg-rose-100 text-rose-700 text-xs px-4 py-2 rounded-xl font-bold">🔴 ไม่อนุมัติ</button></div>`;
                 container.appendChild(card);
             });
         }
@@ -721,7 +801,7 @@
         function closeMedicalAlertModal() { document.getElementById('medical-cert-alert-modal').classList.add('hidden'); }
 
         function handleLeaveFormSubmit(e) {
-            e.preventDefault(); const currentEmp = loggedInUserSession.data; const type = document.getElementById('f-leave-type').value; const reason = document.getElementById('f-reason').value; const dayWeight = parseFloat(document.getElementById('full-summary-count').getAttribute('data-days') || 0);
+            e.preventDefault(); const currentEmp = loggedInUserSession.data; const type = document.getElementById('f-leave-type').value; const reason = document.getElementById('f-reason').value; const dayWeight = parseFloat(document.getElementById('full-summary-count').getAttribute('data-days'] || 0));
             let targetStartDate = (currentFormPageMode === 'full') ? document.getElementById('f-start-date').value : document.getElementById('f-hour-date').value;
             let targetEndDate = (currentFormPageMode === 'full') ? document.getElementById('f-end-date').value : document.getElementById('f-hour-date').value;
             let timeText = (currentFormPageMode === 'full') ? "เต็มวัน" : `${document.getElementById('f-time-start').value} - ${document.getElementById('f-time-end').value}`;
