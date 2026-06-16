@@ -17,7 +17,7 @@
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col md:flex-row">
 
-    <div id="toast-notification" class="hidden fixed top-5 right-5 z-50 bg-slate-900 text-white px-5 py-4 rounded-2xl shadow-2xl border border-slate-700 flex items-center gap-3 animate-bounce">
+    <div id="toast-notification" class="hidden fixed top-5 right-5 z-50 bg-slate-900 text-white px-5 py-4 rounded-2xl shadow-2xl border border-slate-700 flex items-center gap-3">
         <div class="w-8 h-8 bg-indigo-600 rounded-xl flex items-center justify-center text-sm">🔔</div>
         <div>
             <p class="text-xs font-bold">มีการเปลี่ยนแปลงในระบบ!</p>
@@ -422,10 +422,12 @@
 
         checkUserSessionAndListen();
 
+        // 1. แก้ไขปัญหาระบบล็อกอิน (ตรวจสอบเชื่อมต่อข้อมูลคลาวด์)
         function handleLoginSubmit(event) {
             event.preventDefault();
             const uField = document.getElementById('login-username').value.trim().toLowerCase();
             const pField = document.getElementById('login-password').value;
+            
             const matchAdmin = adminDatabase.find(x => x.username === uField && x.password === pField);
 
             if (matchAdmin) {
@@ -442,7 +444,6 @@
                     navigateTo('page-emp-dashboard');
                 } else {
                     alert('❌ ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้องคราบ!');
-                    logout();
                 }
             }
             return false;
@@ -495,6 +496,7 @@
             }
         }
 
+        // 2. ปรับฟังก์ชันการลงทะเบียนใหม่ให้ Toast แจ้งเตือนแสดงขึ้นมาก่อน
         function handleRegisterSubmit(e) {
             e.preventDefault();
             const uName = document.getElementById('reg-username').value.trim().toLowerCase();
@@ -822,18 +824,55 @@
             hasShownMedicalAlertThisSession = false; calcFullPageSummary();
         }
 
+        // 3. แก้ไขวันลาให้กลับเป็นระบบเดิม (นับรวมทุกวัน ไม่หักเสาร์-อาทิตย์ออก)
         function calcFullPageSummary() {
-            const summaryLabel = document.getElementById('full-summary-count'); const leaveType = document.getElementById('f-leave-type').value; let finalDaysCount = 0;
+            const summaryLabel = document.getElementById('full-summary-count'); 
+            const leaveType = document.getElementById('f-leave-type').value; 
+            let finalDaysCount = 0;
+
             if (currentFormPageMode === 'full') {
-                const sVal = document.getElementById('f-start-date').value; const eVal = document.getElementById('f-end-date').value;
-                if (sVal && eVal) { for (let c = new Date(sVal); c <= new Date(eVal); c.setDate(c.getDate() + 1)) { if (c.getDay() !== 0 && c.getDay() !== 6) finalDaysCount++; } summaryLabel.innerText = finalDaysCount + " วัน"; summaryLabel.setAttribute('data-days', finalDaysCount); } else { summaryLabel.innerText = "0 วัน"; summaryLabel.setAttribute('data-days', 0); }
+                const sVal = document.getElementById('f-start-date').value; 
+                const eVal = document.getElementById('f-end-date').value;
+                if (sVal && eVal) { 
+                    // ระบบเดิม: นับรวมทุกวันตั้งแต่เริ่มต้นจนถึงวันสิ้นสุดโดยตรง
+                    const startDiff = new Date(sVal);
+                    const endDiff = new Date(eVal);
+                    const timeDiff = endDiff.getTime() - startDiff.getTime();
+                    finalDaysCount = Math.floor(timeDiff / (1000 * 60 * 60 * 24)) + 1;
+                    
+                    if (finalDaysCount < 0) finalDaysCount = 0;
+
+                    summaryLabel.innerText = finalDaysCount + " วัน"; 
+                    summaryLabel.setAttribute('data-days', finalDaysCount); 
+                } else { 
+                    summaryLabel.innerText = "0 วัน"; 
+                    summaryLabel.setAttribute('data-days', 0); 
+                }
             } else {
-                const tStart = document.getElementById('f-time-start').value; const tEnd = document.getElementById('f-time-end').value;
-                if (tStart && tEnd) { const [h1, m1] = tStart.split(':').map(Number); const [h2, m2] = tEnd.split(':').map(Number); let diff = (h2 * 60 + m2) - (h1 * 60 + m1); if (diff > 0) { let hours = Math.floor(diff / 60); finalDaysCount = hours / 8; summaryLabel.innerText = `${Number(finalDaysCount.toFixed(2))} วัน (${hours} ชม.)`; summaryLabel.setAttribute('data-days', finalDaysCount); } }
+                const tStart = document.getElementById('f-time-start').value; 
+                const tEnd = document.getElementById('f-time-end').value;
+                if (tStart && tEnd) { 
+                    const [h1, m1] = tStart.split(':').map(Number); 
+                    const [h2, m2] = tEnd.split(':').map(Number); 
+                    let diff = (h2 * 60 + m2) - (h1 * 60 + m1); 
+                    if (diff > 0) { 
+                        let hours = Math.floor(diff / 60); 
+                        finalDaysCount = hours / 8; 
+                        summaryLabel.innerText = `${Number(finalDaysCount.toFixed(2))} วัน (${hours} ชม.)`; 
+                        summaryLabel.setAttribute('data-days', finalDaysCount); 
+                    } 
+                }
             }
-            if (leaveType.includes("ลาป่วย") && currentFormPageMode === 'full' && finalDaysCount >= 3) { if (!hasShownMedicalAlertThisSession) { document.getElementById('medical-cert-alert-modal').classList.remove('hidden'); hasShownMedicalAlertThisSession = true; } }
-            else { if (finalDaysCount < 3 || !leaveType.includes("ลาป่วย")) hasShownMedicalAlertThisSession = false; }
+            if (leaveType.includes("ลาป่วย") && currentFormPageMode === 'full' && finalDaysCount >= 3) { 
+                if (!hasShownMedicalAlertThisSession) { 
+                    document.getElementById('medical-cert-alert-modal').classList.remove('hidden'); 
+                    hasShownMedicalAlertThisSession = true; 
+                } 
+            } else { 
+                if (finalDaysCount < 3 || !leaveType.includes("ลาป่วย")) hasShownMedicalAlertThisSession = false; 
+            }
         }
+        
         function closeMedicalAlertModal() { document.getElementById('medical-cert-alert-modal').classList.add('hidden'); }
 
         function handleLeaveFormSubmit(e) {
