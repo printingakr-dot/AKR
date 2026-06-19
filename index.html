@@ -106,7 +106,7 @@
                         📩 จัดการคำขอลา
                         <span id="badge-pending-count" class="absolute right-3 top-3.5 bg-rose-500 text-white font-bold text-[10px] px-1.5 py-0.5 rounded-full hidden">0</span>
                     </button>
-                    <button onclick="navigateTo('page-admin-logo')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 hover:text-white text-left cursor-pointer">🎨 ตั้งค่าโลโก้องค์กร</button>
+                    <button onclick="navigateTo('page-admin-logo')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 hover:text-white text-left cursor-pointer">⚙️ ตั้งค่าระบบ & วันหยุด</button>
                 </div>
                 <div id="side-emp-links" class="hidden space-y-1.5">
                     <button onclick="navigateTo('page-emp-dashboard')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 hover:text-white text-left cursor-pointer">📈 Dashboard & โควตา</button>
@@ -137,9 +137,9 @@
                 <button onclick="navigateTo('page-emp-request-form')" class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold py-3 px-5 rounded-xl shadow-md transition-all cursor-pointer text-center">✍️ ยื่นใบลาใหม่</button>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs"><p class="text-xs text-slate-400 font-bold tracking-wide uppercase">🌴 ลาพักผ่อนคงเหลือ</p><p id="emp-quota-vacation" class="text-2xl font-black text-blue-600 mt-1">- / - วัน</p></div>
-                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs"><p class="text-xs text-slate-400 font-bold tracking-wide uppercase">🤒 ลาป่วยคงเหลือ</p><p id="emp-quota-sick" class="text-2xl font-black text-rose-600 mt-1">- / - วัน</p></div>
-                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs"><p class="text-xs text-slate-400 font-bold tracking-wide uppercase">💼 ลากิจคงเหลือ</p><p id="emp-quota-personal" class="text-2xl font-black text-amber-600 mt-1">- / - วัน</p></div>
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs"><p class="text-xs text-slate-400 font-bold tracking-wide uppercase">🌴 ลาพักผ่อนคงเหลือ</p><p id="emp-quota-vacation" class="text-2xl font-black mt-1">-</p></div>
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs"><p class="text-xs text-slate-400 font-bold tracking-wide uppercase">🤒 ลาป่วยคงเหลือ</p><p id="emp-quota-sick" class="text-2xl font-black mt-1">-</p></div>
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs"><p class="text-xs text-slate-400 font-bold tracking-wide uppercase">💼 ลากิจคงเหลือ</p><p id="emp-quota-personal" class="text-2xl font-black mt-1">-</p></div>
             </div>
             <div class="bg-white rounded-3xl border border-slate-200 shadow-2xs p-6 space-y-4">
                 <div class="flex justify-between items-center">
@@ -174,7 +174,12 @@
                 <form id="full-page-frm-leave" class="space-y-5 text-xs md:text-sm" onsubmit="handleLeaveFormSubmit(event)">
                     <div class="space-y-1.5">
                         <label class="block font-semibold text-slate-700 tracking-wide">ประเภทการลา</label>
-                        <select id="f-leave-type" onchange="calcFullPageSummary()" required class="w-full px-4 py-3 border border-slate-200 rounded-xl bg-slate-50/50 text-slate-800 focus:bg-white focus:outline-hidden"><option value="🌴 ลาพักผ่อน">🌴 ลาพักผ่อน</option><option value="🤒 ลาป่วย">🤒 ลาป่วย</option><option value="💼 ลากิจ">💼 ลากิจ</option></select>
+                        <select id="f-leave-type" onchange="calcFullPageSummary()" required class="w-full px-4 py-3 border border-slate-200 rounded-xl bg-slate-50/50 text-slate-800 focus:bg-white focus:outline-hidden">
+                            <option value="🌴 ลาพักผ่อน">🌴 ลาพักผ่อน</option>
+                            <option value="🤒 ลาป่วย">🤒 ลาป่วย</option>
+                            <option value="💼 ลากิจ">💼 ลากิจ</option>
+                            <option value="🛑 ลาไม่รับค่าจ้าง">🛑 วันลาอื่นๆ (ลาไม่รับค่าจ้าง)</option>
+                        </select>
                     </div>
                     <div id="full-wrapper-full" class="grid grid-cols-2 gap-4">
                         <div><label class="block font-semibold text-slate-700">เริ่มวันที่</label><input type="date" id="f-start-date" onchange="calcFullPageSummary()" class="w-full border border-slate-200 rounded-xl p-3 bg-slate-50/30"></div>
@@ -237,7 +242,7 @@
             <div id="admin-pending-requests-list" class="space-y-4"></div>
         </div>
 
-        <!-- แอดมิน: โโลโก้แบรนด์ -->
+        <!-- แอดมิน: ตั้งค่าแบรนด์ & วันหยุดกลาง & เปลี่ยนรหัสผ่าน -->
         <div id="page-admin-logo" class="hidden space-y-6 max-w-6xl mx-auto">
             <div class="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 md:p-8 space-y-6">
                 <div class="space-y-2 border-b border-slate-100 pb-4">
@@ -260,6 +265,52 @@
                     </div>
                 </div>
             </div>
+
+            <!-- จัดการวันหยุดประจำปีสำหรับ Admin -->
+            <div class="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 md:p-8 space-y-4">
+                <div class="border-b border-slate-100 pb-2">
+                    <h3 class="text-base font-bold text-slate-900">🗓️ จัดการวันหยุดประจำปีบริษัท (แสดงบนปฏิทินส่วนกลาง)</h3>
+                    <p class="text-xs text-slate-500">กำหนดวันหยุดบริษัทเพื่อให้พนักงานทุกคนเห็นแถบกิจกรรมวันหยุดบนปฏิทิน</p>
+                </div>
+                <form onsubmit="handleAddHoliday(event)" class="grid grid-cols-1 md:grid-cols-3 gap-3 items-end text-xs md:text-sm">
+                    <div>
+                        <label class="block font-semibold text-slate-600 mb-1">วันที่หยุด</label>
+                        <input type="date" id="holiday-date" required class="w-full border p-2.5 bg-slate-50 rounded-xl">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-slate-600 mb-1">ชื่อวันหยุด / เทศกาล</label>
+                        <input type="text" id="holiday-name" placeholder="เช่น วันขึ้นปีใหม่" required class="w-full border p-2.5 bg-slate-50 rounded-xl">
+                    </div>
+                    <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 rounded-xl shadow-xs cursor-pointer">➕ เพิ่มวันหยุดประจำปี</button>
+                </form>
+                <div class="overflow-x-auto pt-2">
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 border-b text-slate-500 font-semibold"><th class="px-4 py-2">วันที่หยุด</th><th class="px-4 py-2">รายละเอียดวันหยุด</th><th class="px-4 py-2 text-center">การควบคุม</th></tr>
+                        </thead>
+                        <tbody id="holiday-list-body" class="divide-y text-slate-600"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ส่วนเปลี่ยนรหัสผ่านผู้ดูแลระบบ -->
+            <div class="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 md:p-8 space-y-4">
+                <div class="border-b border-slate-100 pb-2">
+                    <h3 class="text-base font-bold text-slate-900">🔐 เปลี่ยนรหัสผ่านบัญชีผู้ดูแลระบบ (Change Admin Password)</h3>
+                    <p class="text-xs text-slate-500">ระบบยกเลิกการตั้งค่า Admin อัตโนมัติแล้ว คุณสามารถระบุรหัสผ่านใหม่เพื่อความปลอดภัยที่นี่</p>
+                </div>
+                <form onsubmit="handleAdminChangePassword(event)" class="space-y-4 max-w-sm text-xs md:text-sm">
+                    <div>
+                        <label class="block font-semibold text-slate-600 mb-1">รหัสผ่านแอดมินใหม่</label>
+                        <input type="password" id="admin-new-password" required placeholder="กรอกรหัสผ่านความปลอดภัยสูงใหม่" class="w-full border p-2.5 bg-slate-50 rounded-xl focus:outline-hidden">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-slate-600 mb-1">ยืนยันรหัสผ่านใหม่อีกครั้ง</label>
+                        <input type="password" id="admin-confirm-password" required placeholder="กรอกรหัสผ่านให้ตรงกัน" class="w-full border p-2.5 bg-slate-50 rounded-xl focus:outline-hidden">
+                    </div>
+                    <button type="submit" class="bg-slate-900 hover:bg-slate-800 text-white font-medium py-2.5 px-5 rounded-xl shadow-xs cursor-pointer">💾 บันทึกเปลี่ยนรหัสผ่านแอดมิน</button>
+                </form>
+            </div>
         </div>
     </main>
 
@@ -269,7 +320,6 @@
     <div id="popup-edit-employee-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-950/40 p-4"><div class="bg-white w-full max-w-lg rounded-3xl p-6 space-y-5"><h3 class="font-bold">⚙️ แก้ไขข้อมูลและสิทธิ์โควตาพนักงาน</h3><form id="frm-admin-edit-emp" onsubmit="handleAdminEditEmpSubmit(event)"><input type="hidden" id="edit-emp-target-id"><div class="space-y-3"><div class="grid grid-cols-2 gap-2"><div><label class="text-xs">ชื่อจริง</label><input type="text" id="edit-emp-fname" class="w-full border p-2 rounded-xl"></div><div><label class="text-xs">นามสกุล</label><input type="text" id="edit-emp-lname" class="w-full border p-2 rounded-xl"></div></div><div class="grid grid-cols-3 gap-2"><div><label class="text-xs">ชื่อเล่น</label><input type="text" id="edit-emp-nname" class="w-full border p-2 rounded-xl"></div><div><label class="text-xs">เพศ</label><select id="edit-emp-gender" class="w-full border p-2 rounded-xl"><option value="ชาย">ชาย</option><option value="หญิง">หญิง</option></select></div><div><label class="text-xs">เบอร์โทร</label><input type="text" id="edit-emp-phone" class="w-full border p-2 rounded-xl"></div></div><div><label class="text-xs">วันเริ่มงาน</label><input type="date" id="edit-emp-startdate" class="w-full border p-2 rounded-xl"></div><div class="grid grid-cols-3 gap-2"><div><label class="text-[10px] font-bold">🌴 พักผ่อนสูงสุด</label><input type="number" id="edit-quota-vacation-max" class="w-full border p-2 rounded-xl text-center"></div><div><label class="text-[10px] font-bold">🤒 ป่วยสูงสุด</label><input type="number" id="edit-quota-sick-max" class="w-full border p-2 rounded-xl text-center"></div><div><label class="text-[10px] font-bold">💼 ลากิจสูงสุด</label><input type="number" id="edit-quota-personal-max" class="w-full border p-2 rounded-xl text-center"></div></div></div><div class="flex gap-2 pt-4"><button type="button" onclick="closeEditEmpModal()" class="flex-1 bg-slate-100 py-2 rounded-xl">ยกเลิก</button><button type="submit" class="flex-1 bg-slate-900 text-white py-2 rounded-xl">บันทึก</button></div></form></div></div>
 
     <script>
-        // 🔐 รายละเอียดการเชื่อมต่อ Firebase คลาวด์แอปพลิเคชันของคุณ
         const firebaseConfig = {
             apiKey: "YOUR_API_KEY", 
             authDomain: "akeleave-9cd1e.firebaseapp.com",
@@ -286,6 +336,7 @@
         let employeeDatabase = [];
         let leaveDatabase = [];
         let adminDatabase = []; 
+        let holidayDatabase = []; 
 
         let currentCalendarDate = new Date();
         let currentFormPageMode = "full";
@@ -356,10 +407,12 @@
         function initAdminPersistenceAndListen() {
             db.collection("admins").onSnapshot((snapshot) => {
                 adminDatabase = [];
-                snapshot.forEach((doc) => { adminDatabase.push(doc.data()); });
-                if (adminDatabase.length === 0) {
-                    db.collection("admins").doc("admin").set({ username: "admin", password: "admin", name: "ผู้ดูแลระบบสูงสุด (HR)" });
-                }
+                snapshot.forEach((doc) => { 
+                    let adData = doc.data();
+                    adData.docId = doc.id;
+                    adminDatabase.push(adData); 
+                });
+
                 const savedSession = localStorage.getItem("user_leave_session");
                 if (savedSession && !loggedInUserSession) {
                     const parsed = JSON.parse(savedSession);
@@ -417,6 +470,21 @@
                         renderAdminMonthlyLeaveList();
                     }
                     if (!document.getElementById('page-admin-requests').classList.contains('hidden')) renderAdminPendingRequests();
+                }
+            });
+
+            db.collection("holidays").onSnapshot((snapshot) => {
+                holidayDatabase = [];
+                snapshot.forEach((doc) => {
+                    let hData = doc.data();
+                    hData.docId = doc.id;
+                    holidayDatabase.push(hData);
+                });
+                holidayDatabase.sort((a,b) => new Date(a.date) - new Date(b.date));
+                if (loggedInUserSession) {
+                    renderCalendarStructure('emp-calendar-container', 'emp-calendar-label');
+                    renderCalendarStructure('admin-calendar-container', 'admin-calendar-label');
+                    if (!document.getElementById('page-admin-logo').classList.contains('hidden')) renderHolidayManagementList();
                 }
             });
         }
@@ -539,9 +607,21 @@
                 const emp = loggedInUserSession.data;
                 document.getElementById('emp-welcome-title').innerText = `สวัสดีครับ, คุณ${emp.firstName} (${emp.nickName}) 👋`;
                 document.getElementById('emp-start-date-badge').innerText = `📅 อายุงานของคุณ: ${calculateWorkAgeDetailed(emp.startDate)}`;
-                document.getElementById('emp-quota-vacation').innerText = `${Number((emp.leaveVacationMax - emp.leaveVacationUsed).toFixed(2))} / ${emp.leaveVacationMax} วัน`;
-                document.getElementById('emp-quota-sick').innerText = `${Number((emp.leaveSickMax - emp.leaveSickUsed).toFixed(2))} / ${emp.leaveSickMax} วัน`;
-                document.getElementById('emp-quota-personal').innerText = `${Number((emp.leavePersonalMax - emp.leavePersonalUsed).toFixed(2))} / ${emp.leavePersonalMax} วัน`;
+                
+                const handleUserQuotaText = (elementId, currentUsed, maxAllowed, baseColorClass) => {
+                    const targetContainer = document.getElementById(elementId);
+                    if (maxAllowed === 0) {
+                        targetContainer.innerText = "ยังไม่มีสิทธิ์ลา";
+                        targetContainer.className = "text-xl font-bold text-red-600 mt-1";
+                    } else {
+                        targetContainer.innerText = `${Number((maxAllowed - currentUsed).toFixed(2))} / ${maxAllowed} วัน`;
+                        targetContainer.className = `text-2xl font-black ${baseColorClass} mt-1`;
+                    }
+                };
+                handleUserQuotaText('emp-quota-vacation', emp.leaveVacationUsed, emp.leaveVacationMax, 'text-blue-600');
+                handleUserQuotaText('emp-quota-sick', emp.leaveSickUsed, emp.leaveSickMax, 'text-rose-600');
+                handleUserQuotaText('emp-quota-personal', emp.leavePersonalUsed, emp.leavePersonalMax, 'text-amber-600');
+                
                 renderCalendarStructure('emp-calendar-container', 'emp-calendar-label');
             } else if (targetPageId === 'page-admin-dashboard') {
                 renderAdminQuotaTable();
@@ -551,6 +631,8 @@
                 renderCrudEmployeeTable();
             } else if (targetPageId === 'page-admin-requests') {
                 renderAdminPendingRequests();
+            } else if (targetPageId === 'page-admin-logo') {
+                renderHolidayManagementList();
             }
             window.scrollTo(0, 0);
         }
@@ -561,7 +643,7 @@
             if (badge) { if (pendingCount > 0) { badge.innerText = pendingCount; badge.classList.remove('hidden'); } else { badge.classList.add('hidden'); } }
         }
 
-        // 🛠️ ฟังก์ชันจัดทำโครงสร้างปฏิทิน (พร้อมแก้บั๊กส่วนตรวจสอบช่วงวันที่ลาพนักงาน)
+        // 🛠️ ฟังก์ชันสร้างโครงสร้างปฏิทิน (มีการอัปเดต วงแดงวันปัจจุบัน และปรับแต่งแถบแสดงผลวันลา)
         function renderCalendarStructure(containerId, labelId) {
             const container = document.getElementById(containerId);
             const label = document.getElementById(labelId);
@@ -573,6 +655,10 @@
 
             const firstDayIndex = new Date(year, month, 1).getDay();
             const totalDaysInMonth = new Date(year, month + 1, 0).getDate();
+
+            // 🕒 ดึงข้อมูลและคำนวณวันปัจจุบัน (Today) ในรูปแบบ ISO สำหรับทำวงแดง
+            const nowTime = new Date();
+            const todayIsoStr = `${nowTime.getFullYear()}-${String(nowTime.getMonth() + 1).padStart(2, '0')}-${String(nowTime.getDate()).padStart(2, '0')}`;
 
             for (let i = 0; i < firstDayIndex; i++) {
                 const emptyCell = document.createElement('div');
@@ -594,7 +680,13 @@
                 const dayNumHeader = document.createElement('div');
                 dayNumHeader.className = "flex justify-between items-center w-full";
                 const dayNumSpan = document.createElement('span');
-                dayNumSpan.className = "text-slate-800 font-bold text-[10px] block"; 
+                
+                // 🛠️ อัปเดตตรรกะ: หากเป็นวันปัจจุบัน ให้ใส่วงกลมสีแดง (วงแดง) ล้อมรอบตัวเลขวันที่
+                if (currentIsoStr === todayIsoStr) {
+                    dayNumSpan.className = "text-rose-600 font-extrabold text-[11px] w-5 h-5 border-2 border-rose-500 rounded-full flex items-center justify-center bg-rose-50";
+                } else {
+                    dayNumSpan.className = "text-slate-800 font-bold text-[10px] block p-0.5"; 
+                }
                 dayNumSpan.innerText = day;
                 dayNumHeader.appendChild(dayNumSpan);
                 
@@ -608,11 +700,18 @@
                 const badgesWrapper = document.createElement('div');
                 badgesWrapper.className = "space-y-1 mt-1 flex-1 overflow-y-auto max-h-[50px]";
 
-                // ✅ แก้ไขตรรกะเปรียบเทียบข้อมูลวันที่ตามที่ส่งมาให้ถูกต้อง ปลอดภัย และไม่ Crash คราบ
+                const matchHoliday = holidayDatabase.find(h => h.date === currentIsoStr);
+                if (matchHoliday) {
+                    dayCell.classList.add('bg-rose-50/60');
+                    const hBadge = document.createElement('div');
+                    hBadge.className = "text-[9px] bg-rose-600 text-white rounded px-1 py-0.5 truncate text-center font-bold font-sans mt-0.5 block";
+                    hBadge.innerText = `🎉 ${matchHoliday.name}`;
+                    badgesWrapper.appendChild(hBadge);
+                }
+
                 const matchingLeaves = leaveDatabase.filter(leave => {
                     if (leave.status !== 'approved' && leave.status !== 'pending') return false;
                     
-                    // สร้าง Date ของวันที่ช่องปฏิทินปัจจุบัน (Local Time)
                     const cDate = new Date(year, month, day);
                     cDate.setHours(0,0,0,0);
 
@@ -630,19 +729,41 @@
                     }
                     eDate.setHours(0,0,0,0);
                     
-                    // ส่งคืนค่าผลลัพธ์การตรวจสอบเพื่อคัดเลือกใบลาลงช่องปฏิทิน
                     return cDate >= sDate && cDate <= eDate;
                 });
 
                 if (matchingLeaves.length > 0) {
                     matchingLeaves.forEach(leaveItem => {
                         const matchEmp = employeeDatabase.find(e => e.username === leaveItem.username);
+                        // แสดงผลเฉพาะ "ชื่อเล่น" ตามความต้องการของคุณ
                         const displayNick = matchEmp ? matchEmp.nickName : leaveItem.name.replace("คุณ", "").split(" ")[0];
-                        const isApp = leaveItem.status === 'approved';
+                        
+                        // 🛠️ อัปเดตตรรกะ: คัดแยกสีสไตล์ของป้ายวันลาบนปฏิทินแยกตามประเภทการลาที่กำหนด
+                        let leaveThemeClasses = "";
+                        if (leaveItem.type.includes("ไม่รับค่าจ้าง")) {
+                            // ลาไม่รับเงิน ➡️ สีแดง
+                            leaveThemeClasses = "bg-rose-100 text-rose-700 border-rose-300";
+                        } else if (leaveItem.type.includes("กิจ")) {
+                            // ลากิจ ➡️ สีน้ำตาล (คุมโทนพรีเมียมอบอุ่น)
+                            leaveThemeClasses = "bg-[#f5ece6] text-[#5c3a21] border-[#d0b49f]";
+                        } else if (leaveItem.type.includes("ป่วย")) {
+                            // ลาป่วย ➡️ สีเหลือง
+                            leaveThemeClasses = "bg-yellow-100 text-yellow-800 border-yellow-300";
+                        } else if (leaveItem.type.includes("พักผ่อน")) {
+                            // ลาพักผ่อน ➡️ สีเขียว
+                            leaveThemeClasses = "bg-emerald-100 text-emerald-800 border-emerald-300";
+                        } else {
+                            leaveThemeClasses = "bg-slate-100 text-slate-700 border-slate-300";
+                        }
+
+                        // หากยังเป็นสถานะรออนุมัติ ให้ทำเอฟเฟกต์กะพริบจางๆ เพิ่มเติมเพื่อแยกแยะสถานะพิจารณา
+                        if (leaveItem.status === 'pending') {
+                            leaveThemeClasses += " animate-pulse opacity-85";
+                        }
                         
                         const bNode = document.createElement('div');
-                        bNode.className = `leave-badge cursor-pointer rounded p-1 text-[9px] truncate text-center font-bold border ${isApp ? 'bg-blue-50 text-blue-700 border-blue-200' : 'bg-amber-50 text-amber-700 border-amber-200 animate-pulse'}`;
-                        bNode.innerHTML = `${isApp ? '🟢' : '⏳'} ลา: ${displayNick}`;
+                        bNode.className = `leave-badge cursor-pointer rounded p-1 text-[9px] truncate text-center font-bold border ${leaveThemeClasses}`;
+                        bNode.innerText = displayNick; // ป้อนข้อความแสดงแค่ชื่อเล่นเดี่ยวๆ
                         bNode.onclick = (e) => { e.stopPropagation(); openModalPopup(leaveItem); };
                         badgesWrapper.appendChild(bNode);
                     });
@@ -684,7 +805,9 @@
                 let statusBadge = item.status === 'approved' ? `<span class="bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-md font-bold text-[10px]">🟢 อนุมัติ</span>` : (item.status === 'pending' ? `<span class="bg-amber-50 text-amber-700 px-2 py-0.5 rounded-md font-bold text-[10px] animate-pulse">⏳ รออนุมัติ</span>` : `<span class="bg-rose-50 text-rose-600 px-2 py-0.5 rounded-md font-bold text-[10px]">🔴 ปฏิเสธ</span>`);
                 let rangeDisplay = item.endDate && item.endDate !== item.date ? `${formatToThaiDateStyle(item.date)} ถึง ${formatToThaiDateStyle(item.endDate)}` : formatToThaiDateStyle(item.date);
                 
-                tr.innerHTML = `<td class="px-4 py-3 font-semibold text-slate-900">${rangeDisplay}</td><td class="px-4 py-3 font-medium">${item.name}</td><td class="px-4 py-3 text-indigo-600 font-semibold">${item.type}</td><td class="px-4 py-3">${item.timeLabel} (${item.daysCount} วัน)</td><td class="px-4 py-3 text-slate-500 max-w-xs truncate">${item.reason}</td><td class="px-4 py-3 text-center">${statusBadge}</td>`;
+                let submittedText = item.appliedDate ? formatToThaiDateStyle(item.appliedDate) : formatToThaiDateStyle(item.date);
+
+                tr.innerHTML = `<td class="px-4 py-3 font-semibold text-slate-900">${rangeDisplay}<br><span class="text-[10px] text-slate-400 font-normal">📬 ยื่นคำร้องเมื่อ: ${submittedText}</span></td><td class="px-4 py-3 font-medium">${item.name}</td><td class="px-4 py-3 text-indigo-600 font-semibold">${item.type}</td><td class="px-4 py-3">${item.timeLabel} (${item.daysCount} วัน)</td><td class="px-4 py-3 text-slate-500 max-w-xs truncate">${item.reason}</td><td class="px-4 py-3 text-center">${statusBadge}</td>`;
                 tbody.appendChild(tr);
             });
         }
@@ -749,7 +872,9 @@
                 let cleanEndDate = formatToThaiDateStyle(req.endDate);
                 let rangeText = req.endDate ? `${cleanStartDate} ถึง ${cleanEndDate}` : cleanStartDate;
 
-                card.innerHTML = `<div class="w-full"><span class="text-sm font-bold">${req.name}</span><p class="text-xs">ประเภท: <span class="text-indigo-600">${req.type}</span> | วันที่ลา: ${rangeText} (${req.timeLabel})</p><div class="text-xs bg-slate-50 p-2 border rounded-xl mt-1">"${req.reason}"</div>${medWarning}</div><div class="flex items-center gap-2 pt-2 md:pt-0"><button onclick="processApprovalAction('${req.docId}', 'approved')" class="bg-emerald-600 text-white text-xs px-4 py-2 rounded-xl font-bold">🟢 อนุมัติ</button><button onclick="processApprovalAction('${req.docId}', 'rejected')" class="bg-rose-100 text-rose-700 text-xs px-4 py-2 rounded-xl font-bold">🔴 ไม่อนุมัติ</button></div>`;
+                let cleanAppliedDate = req.appliedDate ? formatToThaiDateStyle(req.appliedDate) : formatToThaiDateStyle(req.date);
+
+                card.innerHTML = `<div class="w-full"><div class="flex items-center justify-between"><span class="text-sm font-bold">${req.name}</span><span class="text-[11px] font-semibold text-slate-500 bg-slate-100 px-2 py-1 rounded-lg">📬 ยื่นเมื่อ: ${cleanAppliedDate}</span></div><p class="text-xs mt-1">ประเภท: <span class="text-indigo-600 font-bold">${req.type}</span> | วันที่ลา: ${rangeText} (${req.timeLabel})</p><div class="text-xs bg-slate-50 p-2 border rounded-xl mt-1">"${req.reason}"</div>${medWarning}</div><div class="flex items-center gap-2 pt-2 md:pt-0"><button onclick="processApprovalAction('${req.docId}', 'approved')" class="bg-emerald-600 text-white text-xs px-4 py-2 rounded-xl font-bold cursor-pointer">🟢 อนุมัติ</button><button onclick="processApprovalAction('${req.docId}', 'rejected')" class="bg-rose-100 text-rose-700 text-xs px-4 py-2 rounded-xl font-bold cursor-pointer">🔴 ไม่อนุมัติ</button></div>`;
                 container.appendChild(card);
             });
         }
@@ -764,6 +889,7 @@
                         if (req.type.includes('พักผ่อน')) updateQuota.leaveVacationUsed = (emp.leaveVacationUsed || 0) + req.daysCount;
                         else if (req.type.includes('ป่วย')) updateQuota.leaveSickUsed = (emp.leaveSickUsed || 0) + req.daysCount;
                         else if (req.type.includes('กิจ')) updateQuota.leavePersonalUsed = (emp.leavePersonalUsed || 0) + req.daysCount;
+
                         db.collection("employees").doc(req.username).update(updateQuota);
                     }
                 }
@@ -774,19 +900,16 @@
         function changeQuotaPerPage(val) { quotaItemsPerPage = val === 'all' ? employeeDatabase.length : parseInt(val); quotaCurrentPage = 1; renderAdminQuotaTable(); }
         function changeQuotaPage(direction) { quotaCurrentPage += direction; renderAdminQuotaTable(); }
 
-        // 🌟 แก้ไข: ฟังก์ชันแสดงผลตารางโควตาแอดมินและการเรียงลำดับตามเปอร์เซ็นต์ที่ใช้ไป
         function renderAdminQuotaTable() {
             const tbody = document.getElementById('admin-quota-table-body'); if (!tbody) return; tbody.innerHTML = "";
             let displayList = [...employeeDatabase];
             
             if (quotaSortField) {
                 displayList.sort((a, b) => {
-                    // คำนวณเปอร์เซ็นต์การใช้ไปของพนักงาน A
                     let maxA = quotaSortField === 'vacation' ? a.leaveVacationMax : (quotaSortField === 'sick' ? a.leaveSickMax : a.leavePersonalMax);
                     let usedA = quotaSortField === 'vacation' ? a.leaveVacationUsed : (quotaSortField === 'sick' ? a.leaveSickUsed : a.leavePersonalUsed);
                     let pctA = maxA > 0 ? (usedA / maxA) * 100 : 0;
 
-                    // คำนวณเปอร์เซ็นต์การใช้ไปของพนักงาน B
                     let maxB = quotaSortField === 'vacation' ? b.leaveVacationMax : (quotaSortField === 'sick' ? b.leaveSickMax : b.leavePersonalMax);
                     let usedB = quotaSortField === 'vacation' ? b.leaveVacationUsed : (quotaSortField === 'sick' ? b.leaveSickUsed : b.leavePersonalUsed);
                     let pctB = maxB > 0 ? (usedB / maxB) * 100 : 0;
@@ -802,8 +925,9 @@
             if (paginatedList.length === 0) { tbody.innerHTML = `<tr><td colspan="4" class="px-4 py-6 text-center text-slate-400">ไม่มีข้อมูลพนักงานคราบ</td></tr>`; } else {
                 paginatedList.forEach(emp => {
                     const tr = document.createElement('tr');
+                    
                     const createBar = (used, max, color) => {
-                        if (max === 0) return `<div class="py-1 text-slate-400 italic font-semibold text-xs text-center md:text-left">ไม่มีสิทธิ์ลา</div>`;
+                        if (max === 0) return `<div class="py-1 text-red-600 font-bold text-xs text-center md:text-left">ยังไม่มีสิทธิ์ลา</div>`;
                         const pct = Math.min(100, Math.max(0, (used / max) * 100));
                         return `<div class="space-y-1"><div class="flex justify-between text-[11px] font-bold"><span>${Number(used.toFixed(2))} / ${max} วัน</span><span>${Math.round(pct)}%</span></div><div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden"><div class="${color} h-full" style="width: ${pct}%"></div></div></div>`;
                     };
@@ -857,7 +981,6 @@
         }
         function closeMedicalAlertModal() { document.getElementById('medical-cert-alert-modal').classList.add('hidden'); }
 
-        // 🔥 หน้าที่กดยื่นใบลา: ล็อกสิทธิ์วันลาหมดแบบปลอดภัยสูง (Real-time Real DB Validation)
         function handleLeaveFormSubmit(e) {
             e.preventDefault(); 
             const currentEmp = loggedInUserSession.data; 
@@ -867,39 +990,135 @@
             
             if (dayWeight <= 0) { alert('❌ กรุณาเลือกช่วงเวลาลาที่ถูกต้องคราบ!'); return; }
 
-            // 🔒 สั่งดึงข้อมูลล่าสุดจาก Firestore ทันทีที่กดส่ง ป้องกันการดัดแปลงข้อมูล Client Session
             db.collection("employees").doc(currentEmp.username).get().then((doc) => {
                 if (!doc.exists) { alert("❌ ไม่พบข้อมูลพนักงานในระบบคราบ"); return; }
                 const freshEmp = doc.data();
                 
                 let maxQuota = 0, usedQuota = 0, matchTypeKey = "";
-                if (type.includes('พักผ่อน')) { maxQuota = Number(freshEmp.leaveVacationMax || 0); usedQuota = Number(freshEmp.leaveVacationUsed || 0); matchTypeKey = 'พักผ่อน'; }
-                else if (type.includes('ป่วย')) { maxQuota = Number(freshEmp.leaveSickMax || 0); usedQuota = Number(freshEmp.leaveSickUsed || 0); matchTypeKey = 'ป่วย'; }
-                else if (type.includes('กิจ')) { maxQuota = Number(freshEmp.leavePersonalMax || 0); usedQuota = Number(freshEmp.leavePersonalUsed || 0); matchTypeKey = 'กิจ'; }
+                const isUnpaidLeaveMode = type.includes('ไม่รับค่าจ้าง');
+
+                if (isUnpaidLeaveMode) {
+                    maxQuota = 9999;
+                    usedQuota = 0;
+                    matchTypeKey = "ไม่รับค่าจ้าง";
+                } else if (type.includes('พักผ่อน')) { 
+                    maxQuota = Number(freshEmp.leaveVacationMax || 0); usedQuota = Number(freshEmp.leaveVacationUsed || 0); matchTypeKey = 'พักผ่อน'; 
+                } else if (type.includes('ป่วย')) { 
+                    maxQuota = Number(freshEmp.leaveSickMax || 0); usedQuota = Number(freshEmp.leaveSickUsed || 0); matchTypeKey = 'ป่วย'; 
+                } else if (type.includes('กิจ')) { 
+                    maxQuota = Number(freshEmp.leavePersonalMax || 0); usedQuota = Number(freshEmp.leavePersonalUsed || 0); matchTypeKey = 'กิจ'; 
+                }
                 
-                // ⏳ บวกคำนวณจำนวนวันที่อยู่ระหว่าง "รอแอนมินอนุมัติ (pending)" เพื่อตัดสิทธิ์การยื่นคำขอซ้อนลักไก่
-                const pendingDays = leaveDatabase
+                const pendingDays = isUnpaidLeaveMode ? 0 : leaveDatabase
                     .filter(x => x.username === currentEmp.username && x.status === 'pending' && x.type.includes(matchTypeKey))
                     .reduce((sum, item) => sum + Number(item.daysCount || 0), 0);
                     
                 let totalAllocated = usedQuota + pendingDays; let remaining = maxQuota - totalAllocated;
                 
-                if (maxQuota === 0) { alert('❌ ไม่สามารถยื่นคำขอได้เนื่องจากคุณไม่มีสิทธิ์ลางานประเภทนี้คราบ!'); return; }
-                if (remaining <= 0) { alert(`❌ ไม่สามารถยื่นลาได้เนื่องจากวันลาของคุณหมดแล้วคราบ!\n(ใช้ไปแล้ว: ${usedQuota} วัน, รออนุมัติซ้อนอยู่: ${pendingDays} วัน, โควตาสูงสุด: ${maxQuota} วัน)`); return; }
-                if (dayWeight > remaining) { alert(`❌ วันลาคงเหลือไม่พอคราบ!\nโควตาคงเหลือที่ยื่นได้คือ ${Number(remaining.toFixed(2))} วัน (หักรายการค้างอนุมัติแล้ว)\nแต่คุณพยายามยื่นขอเข้ามา ${Number(dayWeight.toFixed(2))} วัน`); return; }
+                if (!isUnpaidLeaveMode) {
+                    if (maxQuota === 0) { alert('❌ ไม่สามารถยื่นคำขอได้เนื่องจากคุณไม่มีสิทธิ์ลางานประเภทนี้คราบ!'); return; }
+                    if (remaining <= 0) { alert(`❌ ไม่สามารถยื่นลาได้เนื่องจากวันลาของคุณหมดแล้วคราบ!\n(ใช้ไปแล้ว: ${usedQuota} วัน, รออนุมัติซ้อนอยู่: ${pendingDays} วัน, โควตาสูงสุด: ${maxQuota} วัน)`); return; }
+                    if (dayWeight > remaining) { alert(`❌ วันลาคงเหลือไม่พอคราบ!\nโควตาคงเหลือที่ยื่นได้คือ ${Number(remaining.toFixed(2))} วัน (หักรายการค้างอนุมัติแล้ว)\nแต่คุณพยายามยื่นขอเข้ามา ${Number(dayWeight.toFixed(2))} วัน`); return; }
+                }
 
                 let targetStartDate = (currentFormPageMode === 'full') ? document.getElementById('f-start-date').value : document.getElementById('f-hour-date').value;
                 let targetEndDate = (currentFormPageMode === 'full') ? document.getElementById('f-end-date').value : document.getElementById('f-hour-date').value;
                 let timeText = (currentFormPageMode === 'full') ? "เต็มวัน" : `${document.getElementById('f-time-start').value} - ${document.getElementById('f-time-end').value}`;
                 if (!targetStartDate) return;
 
-                const leavePayload = { id: Date.now(), username: currentEmp.username, name: `คุณ${currentEmp.firstName} (${currentEmp.nickName})`, dept: "พนักงาน", type: type, date: targetStartDate, endDate: targetEndDate, timeLabel: timeText, daysCount: dayWeight, reason: reason, icon: type.substring(0,2), status: "pending" };
+                const leavePayload = { 
+                    id: Date.now(), 
+                    username: currentEmp.username, 
+                    name: `คุณ${currentEmp.firstName} (${currentEmp.nickName})`, 
+                    dept: "พนักงาน", 
+                    type: type, 
+                    date: targetStartDate, 
+                    endDate: targetEndDate, 
+                    timeLabel: timeText, 
+                    daysCount: dayWeight, 
+                    reason: reason, 
+                    icon: type.substring(0,2), 
+                    status: "pending",
+                    appliedDate: new Date().toISOString().split('T')[0]
+                };
+
                 db.collection("leaves").add(leavePayload).then(() => {
                     showToastBox(`คำขอลาใหม่เข้ามา: คุณ${currentEmp.firstName} ส่งเอกสารแล้ว`); 
                     alert('🚀 ส่งใบคำขอลาเพื่อรอการอนุมัติสำเร็จเรียบร้อยแล้วคราบ!');
                     document.getElementById('full-page-frm-leave').reset(); hasShownMedicalAlertThisSession = false; navigateTo('page-emp-dashboard');
                 });
             }).catch((err) => { alert("❌ เกิดข้อผิดพลาดในการเชื่อมต่อฐานข้อมูลคราบ"); });
+        }
+
+        function handleAddHoliday(e) {
+            e.preventDefault();
+            const hDate = document.getElementById('holiday-date').value;
+            const hName = document.getElementById('holiday-name').value.trim();
+            if(!hDate || !hName) return;
+
+            db.collection("holidays").add({ date: hDate, name: hName }).then(() => {
+                document.getElementById('holiday-date').value = "";
+                document.getElementById('holiday-name').value = "";
+                showToastBox("🎉 บันทึกวันหยุดประจำปีใหม่เรียบร้อยแล้วคราบ!");
+            }).catch(() => alert("เกิดข้อผิดพลาดในการบันทึกข้อมูล"));
+        }
+
+        function renderHolidayManagementList() {
+            const tbody = document.getElementById('holiday-list-body');
+            if (!tbody) return; tbody.innerHTML = "";
+
+            if (holidayDatabase.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="3" class="px-4 py-4 text-center text-slate-400 italic">ยังไม่ได้เพิ่มข้อมูลวันหยุดประจำปีบริษัทคราบ</td></tr>`;
+                return;
+            }
+
+            holidayDatabase.forEach(h => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50";
+                tr.innerHTML = `
+                    <td class="px-4 py-2.5 font-semibold text-slate-800">${formatToThaiDateStyle(h.date)}</td>
+                    <td class="px-4 py-2.5 text-slate-600">${h.name}</td>
+                    <td class="px-4 py-2.5 text-center">
+                        <button onclick="deleteHolidayData('${h.docId}')" class="text-rose-600 hover:text-rose-800 font-bold hover:underline cursor-pointer">✕ ลบวันหยุด</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function deleteHolidayData(docId) {
+            if (confirm("⚠️ คุณแน่ใจใช่ไหมที่จะลบวันหยุดประจำปีนี้ออกจากระบบปฏิทิน?")) {
+                db.collection("holidays").doc(docId).delete().then(() => {
+                    showToastBox("🗑️ ลบข้อมูลวันหยุดเรียบร้อยแล้วคราบ");
+                });
+            }
+        }
+
+        function handleAdminChangePassword(e) {
+            e.preventDefault();
+            const newPassword = document.getElementById('admin-new-password').value;
+            const confirmPassword = document.getElementById('admin-confirm-password').value;
+
+            if (newPassword !== confirmPassword) {
+                alert("❌ รหัสผ่านใหม่ทั้งสองช่องไม่ตรงกันคราบ กรุณาตรวจสอบอีกครั้ง!");
+                return;
+            }
+
+            if (loggedInUserSession && loggedInUserSession.role === 'admin') {
+                const currentAdminUser = loggedInUserSession.username;
+                const activeAdminDoc = adminDatabase.find(x => x.username === currentAdminUser);
+                const targetDocId = activeAdminDoc && activeAdminDoc.docId ? activeAdminDoc.docId : "admin";
+
+                db.collection("admins").doc(targetDocId).update({
+                    password: newPassword
+                }).then(() => {
+                    alert("🎉 เปลี่ยนรหัสผ่านของบัญชีผู้ดูแลระบบ (Admin) สำเร็จเรียบร้อยคราบ!");
+                    document.getElementById('admin-new-password').value = "";
+                    document.getElementById('admin-confirm-password').value = "";
+                }).catch((err) => {
+                    alert("❌ ไม่สามารถอัปเดตรหัสผ่านได้เนื่องจากมีข้อผิดพลาดระบบคราบ");
+                });
+            }
         }
     </script>
 </body>
