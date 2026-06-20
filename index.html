@@ -157,6 +157,47 @@
                     <div class="text-rose-500">อา.</div><div>จ.</div><div>อ.</div><div>พ.</div><div>พฤ.</div><div>ศ.</div><div class="text-rose-500">ส.</div>
                 </div>
                 <div id="emp-calendar-container" class="grid grid-cols-7 gap-2 min-h-[320px]"></div>
+
+                <!-- 📌 กล่องแสดงข้อความเงื่อนไขการลาข้างล่างปฏิทิน -->
+                <div class="mt-4 pt-4 border-t border-slate-100 grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-600">
+                    <div class="p-3 bg-blue-50/50 rounded-xl border border-blue-100/80">
+                        <p class="font-bold text-blue-700 mb-1">🌴 ลาพักร้อน</p>
+                        <p class="leading-relaxed">ทำงานครบ 1 ปี ลาได้ 6 วัน /<br>ทำงานครบ 3 ปี ลาได้ 10 วัน</p>
+                    </div>
+                    <div class="p-3 bg-rose-50/50 rounded-xl border border-rose-100/80">
+                        <p class="font-bold text-rose-700 mb-1">🤒 ลาป่วย</p>
+                        <p class="leading-relaxed">ลาป่วย ได้ 30 วัน / ปี<br><span class="text-slate-400">กรณีลาติดต่อกันเกิน 3 วัน ต้องมีใบรับรองแพทย์</span></p>
+                    </div>
+                    <div class="p-3 bg-amber-50/50 rounded-xl border border-amber-100/80">
+                        <p class="font-bold text-amber-700 mb-1">💼 ลากิจ</p>
+                        <p class="leading-relaxed">ทำงานครบ 1 ปี ลาได้ 3 วัน /<br>ทำงานครบ 3 ปี ลาได้ 5 วัน</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 📋 ส่วนแสดงประวัติและรายการคำขอของตนเองพนักงาน -->
+            <div class="bg-white rounded-3xl border border-slate-200 shadow-2xs p-6 space-y-4">
+                <div>
+                    <h3 class="text-base font-bold text-slate-900">📋 ประวัติการยื่นคำขอลาของคุณ</h3>
+                    <p class="text-slate-400 text-[11px] mt-0.5">ตรวจสอบสถานะคำขอลา และคุณสามารถกดยกเลิกคำขอที่ระบบยังไม่ได้อนุมัติได้ทันที</p>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 text-slate-500 font-semibold border-b">
+                                <th class="px-4 py-2.5">วันที่ลา</th>
+                                <th class="px-4 py-2.5">ประเภทการลา</th>
+                                <th class="px-4 py-2.5">ระยะเวลา</th>
+                                <th class="px-4 py-2.5">เหตุผลความจำเป็น</th>
+                                <th class="px-4 py-2.5 text-center">สถานะ</th>
+                                <th class="px-4 py-2.5 text-center">การจัดการ</th>
+                            </tr>
+                        </thead>
+                        <tbody id="emp-own-requests-body" class="divide-y text-slate-600">
+                            <!-- แทรกรหัสผ่าน JS อัตโนมัติ -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
@@ -464,7 +505,10 @@
                 updateSideBadges();
 
                 if (loggedInUserSession) {
-                    if (!document.getElementById('page-emp-dashboard').classList.contains('hidden')) renderCalendarStructure('emp-calendar-container', 'emp-calendar-label');
+                    if (!document.getElementById('page-emp-dashboard').classList.contains('hidden')) {
+                        renderCalendarStructure('emp-calendar-container', 'emp-calendar-label');
+                        renderEmployeeOwnRequests();
+                    }
                     if (!document.getElementById('page-admin-dashboard').classList.contains('hidden')) {
                         renderCalendarStructure('admin-calendar-container', 'admin-calendar-label');
                         renderAdminMonthlyLeaveList();
@@ -623,6 +667,7 @@
                 handleUserQuotaText('emp-quota-personal', emp.leavePersonalUsed, emp.leavePersonalMax, 'text-amber-600');
                 
                 renderCalendarStructure('emp-calendar-container', 'emp-calendar-label');
+                renderEmployeeOwnRequests();
             } else if (targetPageId === 'page-admin-dashboard') {
                 renderAdminQuotaTable();
                 renderCalendarStructure('admin-calendar-container', 'admin-calendar-label');
@@ -643,7 +688,6 @@
             if (badge) { if (pendingCount > 0) { badge.innerText = pendingCount; badge.classList.remove('hidden'); } else { badge.classList.add('hidden'); } }
         }
 
-        // 🛠️ ฟังก์ชันสร้างโครงสร้างปฏิทิน (มีการอัปเดต วงแดงวันปัจจุบัน และปรับแต่งแถบแสดงผลวันลา)
         function renderCalendarStructure(containerId, labelId) {
             const container = document.getElementById(containerId);
             const label = document.getElementById(labelId);
@@ -656,7 +700,6 @@
             const firstDayIndex = new Date(year, month, 1).getDay();
             const totalDaysInMonth = new Date(year, month + 1, 0).getDate();
 
-            // 🕒 ดึงข้อมูลและคำนวณวันปัจจุบัน (Today) ในรูปแบบ ISO สำหรับทำวงแดง
             const nowTime = new Date();
             const todayIsoStr = `${nowTime.getFullYear()}-${String(nowTime.getMonth() + 1).padStart(2, '0')}-${String(nowTime.getDate()).padStart(2, '0')}`;
 
@@ -681,7 +724,6 @@
                 dayNumHeader.className = "flex justify-between items-center w-full";
                 const dayNumSpan = document.createElement('span');
                 
-                // 🛠️ อัปเดตตรรกะ: หากเป็นวันปัจจุบัน ให้ใส่วงกลมสีแดง (วงแดง) ล้อมรอบตัวเลขวันที่
                 if (currentIsoStr === todayIsoStr) {
                     dayNumSpan.className = "text-rose-600 font-extrabold text-[11px] w-5 h-5 border-2 border-rose-500 rounded-full flex items-center justify-center bg-rose-50";
                 } else {
@@ -735,35 +777,28 @@
                 if (matchingLeaves.length > 0) {
                     matchingLeaves.forEach(leaveItem => {
                         const matchEmp = employeeDatabase.find(e => e.username === leaveItem.username);
-                        // แสดงผลเฉพาะ "ชื่อเล่น" ตามความต้องการของคุณ
                         const displayNick = matchEmp ? matchEmp.nickName : leaveItem.name.replace("คุณ", "").split(" ")[0];
                         
-                        // 🛠️ อัปเดตตรรกะ: คัดแยกสีสไตล์ของป้ายวันลาบนปฏิทินแยกตามประเภทการลาที่กำหนด
                         let leaveThemeClasses = "";
                         if (leaveItem.type.includes("ไม่รับค่าจ้าง")) {
-                            // ลาไม่รับเงิน ➡️ สีแดง
                             leaveThemeClasses = "bg-rose-100 text-rose-700 border-rose-300";
                         } else if (leaveItem.type.includes("กิจ")) {
-                            // ลากิจ ➡️ สีน้ำตาล (คุมโทนพรีเมียมอบอุ่น)
                             leaveThemeClasses = "bg-[#f5ece6] text-[#5c3a21] border-[#d0b49f]";
                         } else if (leaveItem.type.includes("ป่วย")) {
-                            // ลาป่วย ➡️ สีเหลือง
                             leaveThemeClasses = "bg-yellow-100 text-yellow-800 border-yellow-300";
                         } else if (leaveItem.type.includes("พักผ่อน")) {
-                            // ลาพักผ่อน ➡️ สีเขียว
                             leaveThemeClasses = "bg-emerald-100 text-emerald-800 border-emerald-300";
                         } else {
                             leaveThemeClasses = "bg-slate-100 text-slate-700 border-slate-300";
                         }
 
-                        // หากยังเป็นสถานะรออนุมัติ ให้ทำเอฟเฟกต์กะพริบจางๆ เพิ่มเติมเพื่อแยกแยะสถานะพิจารณา
                         if (leaveItem.status === 'pending') {
                             leaveThemeClasses += " animate-pulse opacity-85";
                         }
                         
                         const bNode = document.createElement('div');
                         bNode.className = `leave-badge cursor-pointer rounded p-1 text-[9px] truncate text-center font-bold border ${leaveThemeClasses}`;
-                        bNode.innerText = displayNick; // ป้อนข้อความแสดงแค่ชื่อเล่นเดี่ยวๆ
+                        bNode.innerText = displayNick; 
                         bNode.onclick = (e) => { e.stopPropagation(); openModalPopup(leaveItem); };
                         badgesWrapper.appendChild(bNode);
                     });
@@ -785,6 +820,66 @@
             if (!document.getElementById('page-emp-dashboard').classList.contains('hidden')) renderCalendarStructure('emp-calendar-container', 'emp-calendar-label');
             if (!document.getElementById('page-admin-dashboard').classList.contains('hidden')) {
                 renderCalendarStructure('admin-calendar-container', 'admin-calendar-label'); renderAdminMonthlyLeaveList(); 
+            }
+        }
+
+        // 🛠️ ฟังก์ชันแสดงประวัติการลาและการยกเลิกคำขอของตัวพนักงานเอง
+        function renderEmployeeOwnRequests() {
+            const tbody = document.getElementById('emp-own-requests-body');
+            if (!tbody || !loggedInUserSession || loggedInUserSession.role !== 'employee') return;
+            tbody.innerHTML = "";
+
+            const myUsername = loggedInUserSession.data.username;
+            const myLeaves = leaveDatabase.filter(item => item.username === myUsername);
+
+            // เรียงลำดับคำขอลาล่าสุดขึ้นก่อน
+            myLeaves.sort((a, b) => b.id - a.id);
+
+            if (myLeaves.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="px-4 py-6 text-center text-slate-400 italic">คุณยังไม่มีประวัติการส่งคำขอลาคราบ</td></tr>`;
+                return;
+            }
+
+            myLeaves.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 text-xs border-b";
+
+                let statusBadge = '';
+                let actionBtn = '';
+
+                if (item.status === 'approved') {
+                    statusBadge = `<span class="bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-md font-bold text-[10px]">🟢 อนุมัติแล้ว</span>`;
+                    actionBtn = `<span class="text-slate-400 italic text-[11px]">-</span>`;
+                } else if (item.status === 'pending') {
+                    statusBadge = `<span class="bg-amber-50 text-amber-700 px-2 py-0.5 rounded-md font-bold text-[10px] animate-pulse">⏳ รออนุมัติ</span>`;
+                    actionBtn = `<button onclick="cancelEmployeeRequest('${item.docId}')" class="bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 px-2.5 py-1 rounded-xl font-bold transition-all cursor-pointer shadow-2xs">🗑️ ยกเลิกคำขอ</button>`;
+                } else {
+                    statusBadge = `<span class="bg-rose-50 text-rose-600 px-2 py-0.5 rounded-md font-bold text-[10px]">🔴 ปฏิเสธ</span>`;
+                    actionBtn = `<span class="text-slate-400 italic text-[11px]">-</span>`;
+                }
+
+                let rangeDisplay = item.endDate && item.endDate !== item.date ? `${formatToThaiDateStyle(item.date)} ถึง ${formatToThaiDateStyle(item.endDate)}` : formatToThaiDateStyle(item.date);
+
+                tr.innerHTML = `
+                    <td class="px-4 py-3 font-semibold text-slate-900">${rangeDisplay}</td>
+                    <td class="px-4 py-3 font-medium text-indigo-600">${item.type}</td>
+                    <td class="px-4 py-3">${item.timeLabel} (${item.daysCount} วัน)</td>
+                    <td class="px-4 py-3 text-slate-500 max-w-xs truncate">${item.reason}</td>
+                    <td class="px-4 py-3 text-center">${statusBadge}</td>
+                    <td class="px-4 py-3 text-center">${actionBtn}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // 🛠️ ฟังก์ชันสำหรับให้พนักงานกดยกเลิกคำขอลาของตนเอง (ลบเอกสารออกจาก Firestore คลาวด์)
+        function cancelEmployeeRequest(docId) {
+            if (confirm("⚠️ คุณแน่ใจใช่ไหมที่จะยกเลิกและลบคำขอลาที่ยังไม่ได้อนุมัติรายการนี้?")) {
+                db.collection("leaves").doc(docId).delete().then(() => {
+                    showToastBox("🗑️ ยกเลิกคำขอลาของคุณออกจากระบบสำเร็จแล้วคราบ");
+                }).catch((error) => {
+                    alert("❌ เกิดข้อผิดพลาดในระบบ: " + error.message);
+                });
             }
         }
 
