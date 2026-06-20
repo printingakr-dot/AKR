@@ -136,10 +136,11 @@
                 </div>
                 <button onclick="navigateTo('page-emp-request-form')" class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold py-3 px-5 rounded-xl shadow-md transition-all cursor-pointer text-center">✍️ ยื่นใบลาใหม่</button>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs"><p class="text-xs text-slate-400 font-bold tracking-wide uppercase">🌴 ลาพักผ่อนคงเหลือ</p><p id="emp-quota-vacation" class="text-2xl font-black mt-1">-</p></div>
                 <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs"><p class="text-xs text-slate-400 font-bold tracking-wide uppercase">🤒 ลาป่วยคงเหลือ</p><p id="emp-quota-sick" class="text-2xl font-black mt-1">-</p></div>
                 <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs"><p class="text-xs text-slate-400 font-bold tracking-wide uppercase">💼 ลากิจคงเหลือ</p><p id="emp-quota-personal" class="text-2xl font-black mt-1">-</p></div>
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs"><p class="text-xs text-slate-400 font-bold tracking-wide uppercase">🛑 ลาไม่รับค่าจ้างสะสม</p><p id="emp-quota-unpaid" class="text-2xl font-black text-rose-600 mt-1">-</p></div>
             </div>
             <div class="bg-white rounded-3xl border border-slate-200 shadow-2xs p-6 space-y-4">
                 <div class="flex justify-between items-center">
@@ -251,7 +252,13 @@
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse text-xs md:text-sm">
                         <thead>
-                            <tr class="bg-slate-50 text-slate-500 border-b"><th class="px-4 py-3 min-w-[220px]">รายชื่อพนักงาน / อายุงานละเอียด</th><th class="px-4 py-3 min-w-[200px]">🌴 ลาพักผ่อน <button onclick="toggleQuotaSort('vacation')" id="sort-btn-vacation" class="text-[10px] ml-1">↕️</button></th><th class="px-4 py-3 min-w-[200px]">🤒 ลาป่วย <button onclick="toggleQuotaSort('sick')" id="sort-btn-sick" class="text-[10px] ml-1">↕️</button></th><th class="px-4 py-3 min-w-[200px]">💼 ลากิจ <button onclick="toggleQuotaSort('personal')" id="sort-btn-personal" class="text-[10px] ml-1">↕️</button></th></tr>
+                            <tr class="bg-slate-50 text-slate-500 border-b">
+                                <th class="px-4 py-3 min-w-[180px]">รายชื่อพนักงาน / อายุงานละเอียด</th>
+                                <th class="px-4 py-3 min-w-[150px]">🌴 ลาพักผ่อน <button onclick="toggleQuotaSort('vacation')" id="sort-btn-vacation" class="text-[10px] ml-1">↕️</button></th>
+                                <th class="px-4 py-3 min-w-[150px]">🤒 ลาป่วย <button onclick="toggleQuotaSort('sick')" id="sort-btn-sick" class="text-[10px] ml-1">↕️</button></th>
+                                <th class="px-4 py-3 min-w-[150px]">💼 ลากิจ <button onclick="toggleQuotaSort('personal')" id="sort-btn-personal" class="text-[10px] ml-1">↕️</button></th>
+                                <th class="px-4 py-3 min-w-[160px]">🛑 ลาไม่รับค่าจ้าง <button onclick="toggleQuotaSort('unpaid')" id="sort-btn-unpaid" class="text-[10px] ml-1">↕️</button></th>
+                            </tr>
                         </thead>
                         <tbody id="admin-quota-table-body" class="divide-y text-slate-600"></tbody>
                     </table>
@@ -268,7 +275,7 @@
                 <div id="admin-calendar-container" class="grid grid-cols-7 gap-2 min-h-[320px]"></div>
             </div>
             
-            <div class="bg-white rounded-2xl border border-slate-200 p-5 space-y-3"><div class="flex justify-between border-b pb-2"><h3 class="text-sm font-bold text-slate-800">📋 รายละเอียดข้อมูลประวัติการลางานประจำเดือนนี้</h3><span id="admin-list-month-label" class="text-xs font-semibold">-</span></div><div class="overflow-x-auto"><table class="w-full text-left text-xs border-collapse"><thead><tr class="bg-slate-50 text-slate-500 font-semibold border-b"><th class="px-4 py-2">วันที่ลา (วัน/เดือน/ปี)</th><th class="px-4 py-2">พนักงาน</th><th class="px-4 py-2">ประเภท</th><th class="px-4 py-2">ระยะเวลา</th><th class="px-4 py-2">เหตุผล</th><th class="px-4 py-2 text-center">สถานะ</th></tr></thead><tbody id="admin-monthly-leave-list-body" class="divide-y text-slate-600"></tbody></table></div></div>
+            <div class="bg-white rounded-2xl border border-slate-200 p-5 space-y-3"><div class="flex justify-between border-b pb-2"><h3 class="text-sm font-bold text-slate-800">📋 รายละเอียดข้อมูลประวัติการลางานประจำเดือนนี้</h3><span id="admin-list-month-label" class="text-xs font-semibold">-</span></div><div class="overflow-x-auto"><table class="w-full text-left text-xs border-collapse"><thead><tr class="bg-slate-50 text-slate-500 font-semibold border-b"><th class="px-4 py-2">วันที่ลา (วัน/เดือน/ปี)</th><th class="px-4 py-2">พนักงาน</th><th class="px-4 py-2">ประเภท</th><th class="px-4 py-2">ระยะเวลา</th><th class="px-4 py-2">เหตุผล</th><th class="px-4 py-2 text-center">Open</th></tr></thead><tbody id="admin-monthly-leave-list-body" class="divide-y text-slate-600"></tbody></table></div></div>
         </div>
 
         <!-- แอดมิน: จัดการพนักงาน CRUD -->
@@ -360,6 +367,43 @@
     <div id="medical-cert-alert-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"><div class="bg-white w-full max-w-md rounded-3xl p-6 text-center space-y-4"><h3>📋 แจ้งเตือนใบรับรองแพทย์</h3><p class="text-xs text-slate-500">เนื่องจากคุณลาป่วยติดต่อกันตั้งแต่ 3 วันขึ้นไป ต้องส่งมอบเอกสารใบรับรองแพทย์ด้วยครับ</p><button onclick="closeMedicalAlertModal()" class="w-full bg-slate-900 text-white py-2 rounded-xl text-xs">รับทราบ</button></div></div>
     <div id="popup-edit-employee-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-950/40 p-4"><div class="bg-white w-full max-w-lg rounded-3xl p-6 space-y-5"><h3 class="font-bold">⚙️ แก้ไขข้อมูลและสิทธิ์โควตาพนักงาน</h3><form id="frm-admin-edit-emp" onsubmit="handleAdminEditEmpSubmit(event)"><input type="hidden" id="edit-emp-target-id"><div class="space-y-3"><div class="grid grid-cols-2 gap-2"><div><label class="text-xs">ชื่อจริง</label><input type="text" id="edit-emp-fname" class="w-full border p-2 rounded-xl"></div><div><label class="text-xs">นามสกุล</label><input type="text" id="edit-emp-lname" class="w-full border p-2 rounded-xl"></div></div><div class="grid grid-cols-3 gap-2"><div><label class="text-xs">ชื่อเล่น</label><input type="text" id="edit-emp-nname" class="w-full border p-2 rounded-xl"></div><div><label class="text-xs">เพศ</label><select id="edit-emp-gender" class="w-full border p-2 rounded-xl"><option value="ชาย">ชาย</option><option value="หญิง">หญิง</option></select></div><div><label class="text-xs">เบอร์โทร</label><input type="text" id="edit-emp-phone" class="w-full border p-2 rounded-xl"></div></div><div><label class="text-xs">วันเริ่มงาน</label><input type="date" id="edit-emp-startdate" class="w-full border p-2 rounded-xl"></div><div class="grid grid-cols-3 gap-2"><div><label class="text-[10px] font-bold">🌴 พักผ่อนสูงสุด</label><input type="number" id="edit-quota-vacation-max" class="w-full border p-2 rounded-xl text-center"></div><div><label class="text-[10px] font-bold">🤒 ป่วยสูงสุด</label><input type="number" id="edit-quota-sick-max" class="w-full border p-2 rounded-xl text-center"></div><div><label class="text-[10px] font-bold">💼 ลากิจสูงสุด</label><input type="number" id="edit-quota-personal-max" class="w-full border p-2 rounded-xl text-center"></div></div></div><div class="flex gap-2 pt-4"><button type="button" onclick="closeEditEmpModal()" class="flex-1 bg-slate-100 py-2 rounded-xl">ยกเลิก</button><button type="submit" class="flex-1 bg-slate-900 text-white py-2 rounded-xl">บันทึก</button></div></form></div></div>
 
+    <!-- 🛠️ WINDOW POPUP: จัดการ เพิ่ม/ลด/รีเซ็ต โควตาวันลาสำหรับ Admin -->
+    <div id="popup-manage-quota-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-950/50 p-4">
+        <div class="bg-white w-full max-w-md rounded-3xl p-6 space-y-5 border shadow-2xl">
+            <div class="flex justify-between items-center border-b pb-2">
+                <h3 class="font-bold text-sm text-slate-900">🛠️ จัดการปรับเปลี่ยนสิทธิ์เวลาวันลาพนักงาน</h3>
+                <button type="button" onclick="closeManageQuotaModal()" class="text-slate-400 hover:text-slate-600 text-sm">✕</button>
+            </div>
+            <div>
+                <p id="manage-quota-emp-title" class="text-xs font-bold text-indigo-600">พนักงาน: -</p>
+                <p class="text-[11px] text-slate-400 mt-0.5">คุณสามารถเลือกรูปแบบการควบคุมสิทธิ์เพื่อแก้ไขวันลาที่ใช้ไปของพนักงานได้ทันที</p>
+            </div>
+            <input type="hidden" id="manage-quota-target-username">
+            <div class="space-y-4 text-xs">
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">เลือกประเภทวันลาที่ต้องการปรับปรุง</label>
+                    <select id="manage-quota-type-select" class="w-full border p-2.5 bg-slate-50 rounded-xl focus:outline-hidden">
+                        <option value="vacation">🌴 วันลาพักผ่อน (Vacation Leave)</option>
+                        <option value="sick">🤒 วันลาป่วย (Sick Leave)</option>
+                        <option value="personal">💼 วันลากิจ (Personal Leave)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">ระบุจำนวน (หน่วย: วัน เช่น 1 หรือ 0.5 หรือ 2.25)</label>
+                    <input type="number" step="0.01" id="manage-quota-amount-input" placeholder="กรอกจำนวนวันลาที่จะ เพิ่ม หรือ ลด" class="w-full border p-2.5 rounded-xl bg-slate-50/50 focus:outline-hidden">
+                </div>
+                <div class="grid grid-cols-2 gap-2 pt-2">
+                    <button type="button" onclick="executeQuotaAdjustment('add')" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2.5 rounded-xl cursor-pointer shadow-xs">➕ เพิ่มวันลาคงเหลือ</button>
+                    <button type="button" onclick="executeQuotaAdjustment('subtract')" class="bg-amber-500 hover:bg-amber-600 text-white font-bold py-2.5 rounded-xl cursor-pointer shadow-xs">➖ ลดวันลาคงเหลือ</button>
+                </div>
+                <div class="border-t pt-3">
+                    <button type="button" onclick="executeQuotaAdjustment('reset')" class="w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-3 rounded-xl cursor-pointer shadow-sm text-center">🔄 รีเซ็ตวันลาที่ใช้ไปให้เป็นศูนย์ (Reset to Full Quota)</button>
+                </div>
+            </div>
+            <button type="button" onclick="closeManageQuotaModal()" class="w-full bg-slate-100 text-slate-600 py-2 rounded-xl text-xs font-semibold">ปิดหน้าต่าง</button>
+        </div>
+    </div>
+
     <script>
         const firebaseConfig = {
             apiKey: "YOUR_API_KEY", 
@@ -388,6 +432,14 @@
         let quotaSortOrder = 'asc';
         let quotaItemsPerPage = 5;
         let quotaCurrentPage = 1;
+
+        // ฟังก์ชันแปลงเลขทศนิยมวันลาให้กลายเป็นรูปแบบคำสรุป "X วัน Y ชั่วโมง" (1 วันคิดเป็น 8 ชั่วโมงทำงาน)
+        const formatDaysAndHoursSummary = (totalDaysValue) => {
+            if (totalDaysValue <= 0) return "0 วัน 0 ชั่วโมง";
+            const floorDays = Math.floor(totalDaysValue);
+            const fractionalHours = Math.round((totalDaysValue - floorDays) * 8);
+            return `${floorDays} วัน ${fractionalHours} ชั่วโมง`;
+        };
 
         function loadSystemLogo() {
             const savedLogo = localStorage.getItem("system_custom_logo");
@@ -508,10 +560,19 @@
                     if (!document.getElementById('page-emp-dashboard').classList.contains('hidden')) {
                         renderCalendarStructure('emp-calendar-container', 'emp-calendar-label');
                         renderEmployeeOwnRequests();
+
+                        // อัปเดตยอดลาไม่รับเงินสะสมแบบ Real-time บน Dashboard พนักงาน
+                        const emp = loggedInUserSession.data;
+                        const totalUnpaidDays = leaveDatabase
+                            .filter(x => x.username === emp.username && x.status === 'approved' && x.type.includes('ไม่รับค่าจ้าง'))
+                            .reduce((sum, item) => sum + Number(item.daysCount || 0), 0);
+                        const empUnpaidEl = document.getElementById('emp-quota-unpaid');
+                        if (empUnpaidEl) empUnpaidEl.innerText = formatDaysAndHoursSummary(totalUnpaidDays);
                     }
                     if (!document.getElementById('page-admin-dashboard').classList.contains('hidden')) {
                         renderCalendarStructure('admin-calendar-container', 'admin-calendar-label');
                         renderAdminMonthlyLeaveList();
+                        renderAdminQuotaTable();
                     }
                     if (!document.getElementById('page-admin-requests').classList.contains('hidden')) renderAdminPendingRequests();
                 }
@@ -666,6 +727,12 @@
                 handleUserQuotaText('emp-quota-sick', emp.leaveSickUsed, emp.leaveSickMax, 'text-rose-600');
                 handleUserQuotaText('emp-quota-personal', emp.leavePersonalUsed, emp.leavePersonalMax, 'text-amber-600');
                 
+                // คำนวณยอดรวมวันลาไม่รับเงินสะสมของพนักงานคนนี้
+                const totalUnpaidDays = leaveDatabase
+                    .filter(x => x.username === emp.username && x.status === 'approved' && x.type.includes('ไม่รับค่าจ้าง'))
+                    .reduce((sum, item) => sum + Number(item.daysCount || 0), 0);
+                document.getElementById('emp-quota-unpaid').innerText = formatDaysAndHoursSummary(totalUnpaidDays);
+
                 renderCalendarStructure('emp-calendar-container', 'emp-calendar-label');
                 renderEmployeeOwnRequests();
             } else if (targetPageId === 'page-admin-dashboard') {
@@ -823,7 +890,6 @@
             }
         }
 
-        // 🛠️ ฟังก์ชันแสดงประวัติการลาและการยกเลิกคำขอของตัวพนักงานเอง
         function renderEmployeeOwnRequests() {
             const tbody = document.getElementById('emp-own-requests-body');
             if (!tbody || !loggedInUserSession || loggedInUserSession.role !== 'employee') return;
@@ -831,8 +897,6 @@
 
             const myUsername = loggedInUserSession.data.username;
             const myLeaves = leaveDatabase.filter(item => item.username === myUsername);
-
-            // เรียงลำดับคำขอลาล่าสุดขึ้นก่อน
             myLeaves.sort((a, b) => b.id - a.id);
 
             if (myLeaves.length === 0) {
@@ -872,7 +936,6 @@
             });
         }
 
-        // 🛠️ ฟังก์ชันสำหรับให้พนักงานกดยกเลิกคำขอลาของตนเอง (ลบเอกสารออกจาก Firestore คลาวด์)
         function cancelEmployeeRequest(docId) {
             if (confirm("⚠️ คุณแน่ใจใช่ไหมที่จะยกเลิกและลบคำขอลาที่ยังไม่ได้อนุมัติรายการนี้?")) {
                 db.collection("leaves").doc(docId).delete().then(() => {
@@ -934,9 +997,10 @@
                     <td class="px-4 py-3.5 text-slate-500">เพศ: ${emp.gender} | 📞 โทร: ${emp.phone}</td>
                     <td class="px-4 py-3.5 font-medium text-slate-600">เริ่มงาน: ${formatToThaiDateStyle(emp.startDate)}<br><span class="text-[11px] text-indigo-600 font-bold">${calculateWorkAgeDetailed(emp.startDate)}</span></td>
                     <td class="px-4 py-3.5 text-center flex flex-wrap items-center justify-center gap-1.5">
-                        <button onclick="openEditEmpModal('${emp.username}')" class="bg-indigo-50 text-indigo-700 border px-2.5 py-1.5 rounded-xl text-xs">✏️ แก้ไข</button>
-                        <button onclick="resetEmployeePassword('${emp.username}')" class="bg-amber-50 text-amber-700 border px-2.5 py-1.5 rounded-xl text-xs">🔄 รีเซ็ต</button>
-                        <button onclick="deleteEmployee('${emp.username}')" class="bg-rose-50 text-rose-600 border px-2.5 py-1.5 rounded-xl text-xs font-medium">🗑️ ลบ</button>
+                        <button onclick="openManageQuotaModal('${emp.username}')" class="bg-linear-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white font-bold px-2.5 py-1.5 rounded-xl text-xs shadow-2xs cursor-pointer transition-all">⚙️ จัดการวันลา</button>
+                        <button onclick="openEditEmpModal('${emp.username}')" class="bg-indigo-50 text-indigo-700 border px-2.5 py-1.5 rounded-xl text-xs cursor-pointer">✏️ แก้ไขข้อมูล</button>
+                        <button onclick="resetEmployeePassword('${emp.username}')" class="bg-amber-50 text-amber-700 border px-2.5 py-1.5 rounded-xl text-xs cursor-pointer">🔄 รีเซ็ต</button>
+                        <button onclick="deleteEmployee('${emp.username}')" class="bg-rose-50 text-rose-600 border px-2.5 py-1.5 rounded-xl text-xs font-medium cursor-pointer">🗑️ ลบ</button>
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -1001,15 +1065,25 @@
             
             if (quotaSortField) {
                 displayList.sort((a, b) => {
-                    let maxA = quotaSortField === 'vacation' ? a.leaveVacationMax : (quotaSortField === 'sick' ? a.leaveSickMax : a.leavePersonalMax);
-                    let usedA = quotaSortField === 'vacation' ? a.leaveVacationUsed : (quotaSortField === 'sick' ? a.leaveSickUsed : a.leavePersonalUsed);
-                    let pctA = maxA > 0 ? (usedA / maxA) * 100 : 0;
+                    if (quotaSortField === 'unpaid') {
+                        const daysA = leaveDatabase
+                            .filter(x => x.username === a.username && x.status === 'approved' && x.type.includes('ไม่รับค่าจ้าง'))
+                            .reduce((sum, item) => sum + Number(item.daysCount || 0), 0);
+                        const daysB = leaveDatabase
+                            .filter(x => x.username === b.username && x.status === 'approved' && x.type.includes('ไม่รับค่าจ้าง'))
+                            .reduce((sum, item) => sum + Number(item.daysCount || 0), 0);
+                        return quotaSortOrder === 'asc' ? daysA - daysB : daysB - daysA;
+                    } else {
+                        let maxA = quotaSortField === 'vacation' ? a.leaveVacationMax : (quotaSortField === 'sick' ? a.leaveSickMax : a.leavePersonalMax);
+                        let usedA = quotaSortField === 'vacation' ? a.leaveVacationUsed : (quotaSortField === 'sick' ? a.leaveSickUsed : a.leavePersonalUsed);
+                        let pctA = maxA > 0 ? (usedA / maxA) * 100 : 0;
 
-                    let maxB = quotaSortField === 'vacation' ? b.leaveVacationMax : (quotaSortField === 'sick' ? b.leaveSickMax : b.leavePersonalMax);
-                    let usedB = quotaSortField === 'vacation' ? b.leaveVacationUsed : (quotaSortField === 'sick' ? b.leaveSickUsed : b.leavePersonalUsed);
-                    let pctB = maxB > 0 ? (usedB / maxB) * 100 : 0;
+                        let maxB = quotaSortField === 'vacation' ? b.leaveVacationMax : (quotaSortField === 'sick' ? b.leaveSickMax : b.leavePersonalMax);
+                        let usedB = quotaSortField === 'vacation' ? b.leaveVacationUsed : (quotaSortField === 'sick' ? b.leaveSickUsed : b.leavePersonalUsed);
+                        let pctB = maxB > 0 ? (usedB / maxB) * 100 : 0;
 
-                    return quotaSortOrder === 'asc' ? pctA - pctB : pctB - pctA;
+                        return quotaSortOrder === 'asc' ? pctA - pctB : pctB - pctA;
+                    }
                 });
             }
             
@@ -1017,7 +1091,7 @@
             if (quotaCurrentPage > totalPages) quotaCurrentPage = totalPages; if (quotaCurrentPage < 1) quotaCurrentPage = 1;
             const paginatedList = displayList.slice((quotaCurrentPage - 1) * perPage, quotaCurrentPage * perPage);
 
-            if (paginatedList.length === 0) { tbody.innerHTML = `<tr><td colspan="4" class="px-4 py-6 text-center text-slate-400">ไม่มีข้อมูลพนักงานคราบ</td></tr>`; } else {
+            if (paginatedList.length === 0) { tbody.innerHTML = `<tr><td colspan="5" class="px-4 py-6 text-center text-slate-400">ไม่มีข้อมูลพนักงานคราบ</td></tr>`; } else {
                 paginatedList.forEach(emp => {
                     const tr = document.createElement('tr');
                     
@@ -1026,12 +1100,93 @@
                         const pct = Math.min(100, Math.max(0, (used / max) * 100));
                         return `<div class="space-y-1"><div class="flex justify-between text-[11px] font-bold"><span>${Number(used.toFixed(2))} / ${max} วัน</span><span>${Math.round(pct)}%</span></div><div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden"><div class="${color} h-full" style="width: ${pct}%"></div></div></div>`;
                     };
-                    tr.innerHTML = `<td class="px-4 py-3.5 border-r font-bold text-xs">คุณ${emp.firstName} (${emp.nickName})<p class="text-[10px] text-indigo-600 font-semibold">${calculateWorkAgeDetailed(emp.startDate)}</p></td><td class="px-4 py-3.5 bg-blue-50/10">${createBar(emp.leaveVacationUsed, emp.leaveVacationMax, "bg-blue-500")}</td><td class="px-4 py-3.5 bg-rose-50/10">${createBar(emp.leaveSickUsed, emp.leaveSickMax, "bg-rose-500")}</td><td class="px-4 py-3.5 bg-amber-50/10">${createBar(emp.leavePersonalUsed, emp.leavePersonalMax, "bg-amber-500")}</td>`;
+
+                    const totalUnpaidDays = leaveDatabase
+                        .filter(x => x.username === emp.username && x.status === 'approved' && x.type.includes('ไม่รับค่าจ้าง'))
+                        .reduce((sum, item) => sum + Number(item.daysCount || 0), 0);
+
+                    const unpaidLabel = formatDaysAndHoursSummary(totalUnpaidDays);
+
+                    tr.innerHTML = `
+                        <td class="px-4 py-3.5 border-r font-bold text-xs">คุณ${emp.firstName} (${emp.nickName})<p class="text-[10px] text-indigo-600 font-semibold">${calculateWorkAgeDetailed(emp.startDate)}</p></td>
+                        <td class="px-4 py-3.5 bg-blue-50/10">${createBar(emp.leaveVacationUsed, emp.leaveVacationMax, "bg-blue-500")}</td>
+                        <td class="px-4 py-3.5 bg-rose-50/10">${createBar(emp.leaveSickUsed, emp.leaveSickMax, "bg-rose-500")}</td>
+                        <td class="px-4 py-3.5 bg-amber-50/10">${createBar(emp.leavePersonalUsed, emp.leavePersonalMax, "bg-amber-500")}</td>
+                        <td class="px-4 py-3.5 bg-slate-100/40">
+                            <div class="py-1">
+                                <span class="text-xs font-extrabold text-rose-700 bg-rose-50 border border-rose-200 px-3 py-1.5 rounded-xl inline-block shadow-2xs">
+                                    รวม: ${unpaidLabel}
+                                </span>
+                            </div>
+                        </td>
+                    `;
                     tbody.appendChild(tr);
                 });
             }
             const paginationContainer = document.getElementById('quota-pagination-controls');
             if (paginationContainer) { paginationContainer.innerHTML = `<span class="text-slate-500">รวมทั้งหมด ${totalItems} คน</span><div class="flex gap-1"><button onclick="changeQuotaPage(-1)" ${quotaCurrentPage === 1 ? 'disabled' : ''} class="bg-slate-100 p-1.5 rounded-xl">◀</button><span class="px-2">หน้า ${quotaCurrentPage}/${totalPages}</span><button onclick="changeQuotaPage(1)" ${quotaCurrentPage === totalPages ? 'disabled' : ''} class="bg-slate-100 p-1.5 rounded-xl">▶</button></div>`; }
+        }
+
+        function openManageQuotaModal(username) {
+            const emp = employeeDatabase.find(x => x.username === username);
+            if (!emp) return;
+
+            document.getElementById('manage-quota-target-username').value = emp.username;
+            document.getElementById('manage-quota-emp-title').innerText = `พนักงานเป้าหมาย: คุณ${emp.firstName} ${emp.lastName} (${emp.nickName})`;
+            document.getElementById('manage-quota-amount-input').value = "";
+            document.getElementById('popup-manage-quota-modal').classList.remove('hidden');
+        }
+
+        function closeManageQuotaModal() {
+            document.getElementById('popup-manage-quota-modal').classList.add('hidden');
+        }
+
+        function executeQuotaAdjustment(actionType) {
+            const targetUsername = document.getElementById('manage-quota-target-username').value;
+            const leaveFieldType = document.getElementById('manage-quota-type-select').value;
+            const amountInput = parseFloat(document.getElementById('manage-quota-amount-input').value || 0);
+
+            const emp = employeeDatabase.find(x => x.username === targetUsername);
+            if (!emp) return;
+
+            let dbFieldUsedKey = "";
+            let currentUsedValue = 0;
+            let maxLimitValue = 0;
+
+            if (leaveFieldType === 'vacation') {
+                dbFieldUsedKey = "leaveVacationUsed"; currentUsedValue = Number(emp.leaveVacationUsed || 0); maxLimitValue = Number(emp.leaveVacationMax || 0);
+            } else if (leaveFieldType === 'sick') {
+                dbFieldUsedKey = "leaveSickUsed"; currentUsedValue = Number(emp.leaveSickUsed || 0); maxLimitValue = Number(emp.leaveSickMax || 0);
+            } else if (leaveFieldType === 'personal') {
+                dbFieldUsedKey = "leavePersonalUsed"; currentUsedValue = Number(emp.leavePersonalUsed || 0); maxLimitValue = Number(emp.leavePersonalMax || 0);
+            }
+
+            let nextUsedValue = currentUsedValue;
+
+            if (actionType === 'add') {
+                if (amountInput <= 0) { alert("❌ กรุณากรอกจำนวนวันลาที่จะทำการเพิ่มเป็นตัวเลขมากกว่า 0 ด้วยคราบ!"); return; }
+                nextUsedValue = currentUsedValue - amountInput;
+                if (nextUsedValue < 0) nextUsedValue = 0; 
+            } else if (actionType === 'subtract') {
+                if (amountInput <= 0) { alert("❌ กรุณากรอกจำนวนวันลาที่จะทำการลดเป็นตัวเลขมากกว่า 0 ด้วยคราบ!"); return; }
+                nextUsedValue = currentUsedValue + amountInput;
+                if (nextUsedValue > maxLimitValue) nextUsedValue = maxLimitValue; 
+            } else if (actionType === 'reset') {
+                if (!confirm("⚠️ คุณต้องการรีเซ็ตประวัติยอดลาที่พนักงานใช้ไปทั้งหมดในส่วนนี้ให้กลับเป็นศูนย์ (ได้สิทธิ์เต็มจำนวนโควตาคืนมา) ใช่หรือไม่?")) return;
+                nextUsedValue = 0;
+            }
+
+            let updatePayload = {};
+            updatePayload[dbFieldUsedKey] = Number(parseFloat(nextUsedValue).toFixed(2));
+
+            db.collection("employees").doc(targetUsername).update(updatePayload).then(() => {
+                showToastBox(`🔄 ปรับปรุงสิทธิ์เวลาโควตาของคุณ${emp.firstName}เสร็จเรียบร้อยแล้วคราบ`);
+                closeManageQuotaModal();
+                if (!document.getElementById('page-admin-dashboard').classList.contains('hidden')) renderAdminQuotaTable();
+                if (!document.getElementById('page-admin-employees').classList.contains('hidden')) renderCrudEmployeeTable();
+            }).catch((err) => {
+                alert("❌ เกิดข้อผิดพลาดทางเทคนิค: " + err.message);
+            });
         }
 
         function switchFullPageLeaveMode(mode) {
@@ -1105,7 +1260,7 @@
                 }
                 
                 const pendingDays = isUnpaidLeaveMode ? 0 : leaveDatabase
-                    .filter(x => x.username === currentEmp.username && x.status === 'pending' && x.type.includes(matchTypeKey))
+                    .filter(x => x.username === currentEmp.username && x.status === 'approved' && x.type.includes(matchTypeKey))
                     .reduce((sum, item) => sum + Number(item.daysCount || 0), 0);
                     
                 let totalAllocated = usedQuota + pendingDays; let remaining = maxQuota - totalAllocated;
